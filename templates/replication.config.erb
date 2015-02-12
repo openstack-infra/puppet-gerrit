@@ -1,6 +1,9 @@
 # This file is managed by puppet.
 # https://git.openstack.org/cgit/openstack-infra/system-config
 
+[gerrit]
+defaultForceUpdate = <%= @replication_force_update %>
+
 <% @replication.each do |replication| -%>
 [remote "<%= replication['name'] %>"]
 	url = <%= replication['url'] %>${name}.git

@@ -68,6 +68,8 @@
 #     A URL for the remote contact store application
 #   replicate_local:
 #     A boolean enabling local replication for apache acceleration
+#   replication_force_update:
+#     A boolean enabling replication to force updates to remote
 #   replicate_path:
 #     The path to the local git replica if replicate_local is enabled
 #   gitweb:
@@ -147,6 +149,7 @@ class gerrit(
   $melody_session = false,
   $replicate_local = false,
   $replicate_path = '/opt/lib/git',
+  $replication_force_update = true,
   $replication = [],
   $gitweb = true,
   $cgit = false,

@@ -1,1 +1,2 @@
+JAVA_OPTIONS='-XX:+HeapDumpOnCtrlBreak -XX:HeapDumpPath=/home/gerrit2/gerritheap.hprof'
 GERRIT_SITE=/home/gerrit2/review_site

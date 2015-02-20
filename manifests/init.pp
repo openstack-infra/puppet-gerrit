@@ -358,6 +358,11 @@ class gerrit(
   a2mod { 'proxy_http':
     ensure => present,
   }
+  if ! defined(A2mod['cgi']) {
+    a2mod { 'cgi':
+      ensure => present,
+    }
+  }
 
   if $ssl_cert_file_contents != '' {
     file { $ssl_cert_file:

@@ -1,18 +1,18 @@
 # == Class: gerrit::remotes
 #
 class gerrit::remotes($ensure=present) {
-    cron { 'gerritfetchremotes':
+    class { 'jeepyb::fetch_remotes':
       ensure  => $ensure,
       user    => 'gerrit2',
       minute  => '*/30',
-      command => 'sleep $((RANDOM\%60+90)) && /usr/local/bin/manage-projects',
-      require => [Class['jeepyb'], File['/var/lib/jeepyb']],
+      logfile => '/var/log/gerritfetchremotes.log',
     }
 
     file { '/var/lib/jeepyb':
       ensure  => directory,
       owner   => 'gerrit2',
       require => User['gerrit2'],
+      before  => Class['jeepyb::fetch_remotes'],
     }
 
     file { '/home/gerrit2/remotes.config':

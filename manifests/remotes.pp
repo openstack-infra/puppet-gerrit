@@ -5,7 +5,7 @@ class gerrit::remotes($ensure=present) {
       ensure  => $ensure,
       user    => 'gerrit2',
       minute  => '*/30',
-      command => 'sleep $((RANDOM\%60+90)) && /usr/local/bin/manage-projects',
+      command => 'sleep $((RANDOM\%60+90)) && /usr/local/bin/manage-projects -v >> /var/log/manage_projects.log 2>&1',
       require => [Class['jeepyb'], File['/var/lib/jeepyb']],
     }
 
@@ -17,5 +17,19 @@ class gerrit::remotes($ensure=present) {
 
     file { '/home/gerrit2/remotes.config':
       ensure => absent,
+    }
+
+    include logrotate
+    logrotate::file { 'manage_projects.log':
+      log     => '/var/log/manage_projects.log',
+      options => [
+        'compress',
+        'missingok',
+        'rotate 30',
+        'daily',
+        'notifempty',
+        'copytruncate',
+      ],
+      require => Cron['gerritfetchremotes'],
     }
 }

@@ -10,6 +10,7 @@
 	hostname = <%= @mysql_host %>
 	database = reviewdb
 	username = gerrit2
+	url = jdbc:mysql://<%= @mysql_host %>/reviewdb?useUnicode=yes&characterSetResults=utf8&characterEncoding=utf8&connectionCollation=utf8_unicode_ci
 <% if @database_poollimit != "" -%>
 	poolLimit = <%= @database_poollimit %>
 <% end -%>

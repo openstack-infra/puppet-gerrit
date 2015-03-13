@@ -5,13 +5,19 @@ class gerrit::mysql(
   $database_name = '',
   $database_user = '',
   $database_password = '',
+  $override_options = {
+    'client' => {
+      'character_set_server' => 'utf8',
+    }
+  }
 ) {
 
   class { 'mysql::server':
     config_hash => {
-      'root_password'  => $mysql_root_password,
-      'default_engine' => 'InnoDB',
-      'bind_address'   => '127.0.0.1',
+      'root_password'    => $mysql_root_password,
+      'default_engine'   => 'InnoDB',
+      'bind_address'     => '127.0.0.1',
+      'override_options' => $override_options
     }
   }
   include mysql::server::account_security

@@ -640,6 +640,23 @@ class gerrit(
     ],
   }
 
+  # management of mysql configs here may conflict with gerrit::mysql
+  if ! defined(Class['gerrit::mysql']) {
+    file { '/etc/mysql':
+      ensure  => 'directory',
+    }
+    # Add config to make clients assume UTF-8 encoding
+    file { '/etc/mysql/my.cnf':
+      ensure  => present,
+      source  => 'puppet:///modules/gerrit/my.cnf',
+      replace => true,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      require => File['/etc/mysql'],
+    }
+  }
+
   package { 'libbcprov-java':
     ensure => present,
   }

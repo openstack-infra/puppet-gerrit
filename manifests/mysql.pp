@@ -27,6 +27,16 @@ class gerrit::mysql(
       Class['mysql::server::account_security'],
     ],
   }
+
+  file { '/etc/mysql/my.cnf':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template('gerrit/my.cnf.erb'),
+    replace => true,
+    require => File['/etc/mysql/my.cnf'],
+  }
 }
 
 # vim:sw=2:ts=2:expandtab:textwidth=79

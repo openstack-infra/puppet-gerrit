@@ -628,60 +628,25 @@ class gerrit(
     ensure  => absent,
   }
 
-  package { 'libmysql-java':
-    ensure => present,
+  # Download required bouncycastle libs for Gerrit 2.10+
+  exec { 'download bcprov-jdk15on-1.51.jar':
+    command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.51/bcprov-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcprov-jdk15on-1.51.jar',
+    creates => '/home/gerrit2/review_site/lib/bcprov-jdk15on-1.51.jar',
+    require => File['/home/gerrit2/review_site/lib'],
   }
-  file { '/home/gerrit2/review_site/lib/mysql-connector-java.jar':
-    ensure  => link,
-    target  => '/usr/share/java/mysql-connector-java.jar',
-    require => [
-      Package['libmysql-java'],
-      File['/home/gerrit2/review_site/lib'],
-    ],
+  exec { 'download bcpkix-jdk15on-1.51.jar':
+    command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpkix-jdk15on/1.51/bcpkix-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcpkix-jdk15on-151',
+    creates => '/home/gerrit2/review_site/lib/bcpkix-jdk15on-151.jar',
+    require => File['/home/gerrit2/review_site/lib'],
   }
-
-  package { 'libbcprov-java':
-    ensure => present,
-  }
-  file { '/home/gerrit2/review_site/lib/bcprov.jar':
-    ensure  => link,
-    target  => '/usr/share/java/bcprov.jar',
-    require => [
-      Package['libbcprov-java'],
-      File['/home/gerrit2/review_site/lib'],
-    ],
-  }
-
-  # Required for the version of Bouncy Castle on Trusty and later
-  if ($::lsbdistcodename != 'precise') {
-    package { 'libbcpkix-java':
-      ensure => present,
-    }
-    file { '/home/gerrit2/review_site/lib/bcpkix.jar':
-      ensure  => link,
-      target  => '/usr/share/java/bcpkix.jar',
-      require => [
-        Package['libbcpkix-java'],
-        File['/home/gerrit2/review_site/lib'],
-      ],
-    }
-  }
-
   # Install Bouncy Castle's OpenPGP plugin and populate the contact store
   # public key file if we're using that feature.
   if ($contactstore == true) {
-    package { 'libbcpg-java':
-      ensure => present,
+    exec { 'download bcpgjdk15on-1.51.jar':
+      command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.51/bcpg-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcpg-jdk15on-1.51.jar',
+      creates => '/home/gerrit2/review_site/lib/bcpg-jdk15on-1.51.jar',
+      require => File['/home/gerrit2/review_site/lib'],
     }
-    file { '/home/gerrit2/review_site/lib/bcpg.jar':
-      ensure  => link,
-      target  => '/usr/share/java/bcpg.jar',
-      require => [
-        Package['libbcpg-java'],
-        File['/home/gerrit2/review_site/lib'],
-      ],
-    }
-
     # Template uses $contactstore_pubkey
     file { '/home/gerrit2/review_site/etc/contact_information.pub':
       ensure  => present,
@@ -705,10 +670,7 @@ class gerrit(
   # Remove libs installed by Gerrit init.
   tidy { '/home/gerrit2/review_site/lib':
     recurse => true,
-    matches => ['bcprov-jdk*.jar',
-                'bcpg-jdk*.jar',
-                'bcpkix-jdk*.jar',
-                'mysql-connector-java-*.jar'],
+    matches => ['mysql-connector-java-*.jar'],
     require => [Exec['gerrit-initial-init'],
                 Exec['gerrit-init']],
   }

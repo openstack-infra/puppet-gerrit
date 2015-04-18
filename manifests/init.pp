@@ -640,6 +640,20 @@ class gerrit(
     ],
   }
 
+  package { 'mysql-client':
+    ensure => present,
+  }
+  # Add config to make clients assume UTF-8 encoding
+  file { '/etc/mysql/conf.d/client.conf':
+    ensure  => present,
+    source  => 'puppet:///modules/gerrit/my.cnf',
+    replace => true,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => Package['mysql-client'],
+  }
+
   package { 'libbcprov-java':
     ensure => present,
   }

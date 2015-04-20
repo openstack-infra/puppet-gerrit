@@ -1,5 +1,5 @@
 {
-  "name": "openstackci-gerrit",
+  "name": "openstackinfra-gerrit",
   "version": "0.0.1",
   "author": "Openstack CI",
   "summary": "Puppet module for Gerrit",

@@ -723,7 +723,7 @@ class gerrit(
                 'bcpg-jdk*.jar',
                 'bcpkix-jdk*.jar',
                 'mysql-connector-java-*.jar'],
-    require => [Exec['gerrit-initial-init'],
-                Exec['gerrit-init']],
+    require => Exec['install-core-plugins'],
+    before  => Exec['gerrit-start'],
   }
 }

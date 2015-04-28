@@ -581,6 +581,16 @@ class gerrit(
     logoutput   => true,
   }
 
+  # Remove libs installed by Gerrit init.
+  tidy { '/home/gerrit2/review_site/lib':
+    recurse => true,
+    matches => ['bcprov-jdk*.jar',
+                'bcpg-jdk*.jar',
+                'bcpkix-jdk*.jar',
+                'mysql-connector-java-*.jar'],
+    require => Exec['install-core-plugins'],
+  }
+
   # Symlink the init script.
   file { '/etc/init.d/gerrit':
     ensure  => link,
@@ -613,7 +623,8 @@ class gerrit(
 
   exec { 'gerrit-start':
     command     => '/etc/init.d/gerrit start',
-    require     => File['/etc/init.d/gerrit'],
+    require     => [File['/etc/init.d/gerrit'],
+                    Tidy['/home/gerrit2/review_site/lib']]
     refreshonly => true,
   }
 
@@ -714,16 +725,5 @@ class gerrit(
       source  => 'puppet:///modules/gerrit/fakestore.cgi',
       require => File['/home/gerrit2/review_site/lib'],
     }
-  }
-
-  # Remove libs installed by Gerrit init.
-  tidy { '/home/gerrit2/review_site/lib':
-    recurse => true,
-    matches => ['bcprov-jdk*.jar',
-                'bcpg-jdk*.jar',
-                'bcpkix-jdk*.jar',
-                'mysql-connector-java-*.jar'],
-    require => [Exec['gerrit-initial-init'],
-                Exec['gerrit-init']],
   }
 }

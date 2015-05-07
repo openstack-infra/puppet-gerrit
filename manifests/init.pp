@@ -651,9 +651,10 @@ class gerrit(
     ensure => present,
   }
   file { '/home/gerrit2/review_site/lib/mysql-connector-java.jar':
-    ensure  => link,
-    target  => '/usr/share/java/mysql-connector-java.jar',
-    require => [
+    ensure   => link,
+    target   => '/usr/share/java/mysql-connector-java.jar',
+    before   => Exec['gerrit-start'],
+    require  => [
       Package['libmysql-java'],
       File['/home/gerrit2/review_site/lib'],
     ],
@@ -679,11 +680,13 @@ class gerrit(
     exec { 'download bcprov-jdk15on-1.51.jar':
       command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.51/bcprov-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcprov.jar',
       creates => '/home/gerrit2/review_site/lib/bcprov.jar',
+      before  => Exec['gerrit-start'],
       require => File['/home/gerrit2/review_site/lib'],
     }
     exec { 'download bcpkix-jdk15on-1.51.jar':
       command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpkix-jdk15on/1.51/bcpkix-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcpkix.jar',
       creates => '/home/gerrit2/review_site/lib/bcpkix.jar',
+      before  => Exec['gerrit-start'],
       require => File['/home/gerrit2/review_site/lib'],
     }
   } else {
@@ -693,6 +696,7 @@ class gerrit(
     file { '/home/gerrit2/review_site/lib/bcprov.jar':
       ensure  => link,
       target  => '/usr/share/java/bcprov.jar',
+      before  => Exec['gerrit-start'],
       require => [
         Package['libbcprov-java'],
         File['/home/gerrit2/review_site/lib'],
@@ -705,9 +709,10 @@ class gerrit(
         ensure => present,
       }
       file { '/home/gerrit2/review_site/lib/bcpkix.jar':
-        ensure  => link,
-        target  => '/usr/share/java/bcpkix.jar',
-        require => [
+        ensure   => link,
+        target   => '/usr/share/java/bcpkix.jar',
+        before   => Exec['gerrit-start'],
+        require  => [
           Package['libbcpkix-java'],
           File['/home/gerrit2/review_site/lib'],
         ],
@@ -722,6 +727,7 @@ class gerrit(
       exec { 'download bcpgjdk15on-1.51.jar':
         command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.51/bcpg-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcpg.jar',
         creates => '/home/gerrit2/review_site/lib/bcpg.jar',
+        before  => Exec['gerrit-start'],
         require => File['/home/gerrit2/review_site/lib'],
       }
     } else {
@@ -729,9 +735,10 @@ class gerrit(
         ensure => present,
       }
       file { '/home/gerrit2/review_site/lib/bcpg.jar':
-        ensure  => link,
-        target  => '/usr/share/java/bcpg.jar',
-        require => [
+        ensure   => link,
+        target   => '/usr/share/java/bcpg.jar',
+        before   => Exec['gerrit-start'],
+        require  => [
           Package['libbcpg-java'],
           File['/home/gerrit2/review_site/lib'],
         ],

@@ -596,7 +596,7 @@ class gerrit(
                 'bcpg-jdk*.jar',
                 'bcpkix-jdk*.jar',
                 'mysql-connector-java-*.jar'],
-    require => Exec['install-core-plugins'],
+    before  => Exec['gerrit-start'],
   }
 
   # Symlink the init script.

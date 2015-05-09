@@ -1,0 +1,9 @@
+Code-Review+2: James E. Blair <corvus@inaugust.com>
+Verified+2: Jenkins
+Code-Review+2: Jeremy Stanley <fungi@yuggoth.org>
+Workflow+1: Jeremy Stanley <fungi@yuggoth.org>
+Submitted-by: Jenkins
+Submitted-at: Sat, 09 May 2015 00:32:17 +0000
+Reviewed-on: https://review.openstack.org/181586
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

@@ -95,6 +95,7 @@ class gerrit(
   $mysql_password,
   $war = '',
   $email_private_key = '',
+  $token_private_key = '',
   $vhost_name = $::fqdn,
   $canonicalweburl = "https://${::fqdn}/",
   $robots_txt_source = '', # If left empty, the gerrit default will be used.
@@ -329,7 +330,7 @@ class gerrit(
   # Gerrit sets these permissions in 'init'; don't fight them.  If
   # these permissions aren't set correctly, gerrit init will write a
   # new secure.config file and lose the mysql password.
-  # Template uses $mysql_password, $email_private_key
+  # Template uses $mysql_password, $email_private_key and $token_private_key
   file { '/home/gerrit2/review_site/etc/secure.config':
     ensure  => present,
     owner   => 'gerrit2',

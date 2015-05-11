@@ -3,6 +3,10 @@
 class gerrit::cron {
 
   cron { 'gerrit_repack':
+    # Latest Gerrit breaks when you repack repos out from under it
+    # temporarily disable repacking until we can fix this in Gerrit
+    # somehow.
+    ensure      => 'absent',
     user        => 'gerrit2',
     weekday     => '0',
     hour        => '4',

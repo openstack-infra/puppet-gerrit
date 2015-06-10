@@ -42,6 +42,9 @@
 [container]
 	user = gerrit2
 	javaHome = <%= @java_home %>
+<% if container_javaoptions != "" -%>
+        javaOptions = <%= container_javaoptions %>
+<% end -%>
 <% if @container_heaplimit != "" -%>
 	heapLimit = <%= @container_heaplimit %>
 <% end -%>

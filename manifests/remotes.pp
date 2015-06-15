@@ -4,5 +4,7 @@ class gerrit::remotes($ensure=present) {
     file { '/home/gerrit2/remotes.config':
       ensure => absent,
     }
-    include jeepyb::fetch_remotes
+    jeepyb::fetch_remotes {
+      ensure => $ensure,
+    }
 }

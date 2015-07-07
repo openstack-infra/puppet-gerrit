@@ -20,4 +20,14 @@ class gerrit::cron {
     ensure      => 'absent',
     user        => 'gerrit2',
   }
+
+  cron { 'clear_gerrit_logs':
+    # Gerrit rotates their own logs, but doesn't clean them out
+    # Delete logs older than a week
+    user        => 'gerrit2',
+    hour        => '6',
+    minute      => '1',
+    command     => 'find /home/gerrit2/review_site/logs/*.gz -mtime +30 -exec rm -f {} \;',
+    environment => 'PATH=/usr/bin:/bin:/usr/sbin:/sbin',
+  }
 }

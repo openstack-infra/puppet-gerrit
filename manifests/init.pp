@@ -623,6 +623,8 @@ class gerrit(
     }
   }
 
+  httpd::logrotate
+
   # Symlink the init script.
   file { '/etc/init.d/gerrit':
     ensure  => link,

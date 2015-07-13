@@ -159,6 +159,9 @@ class gerrit(
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
+  $apache_logdir = '/var/log/apache2',
+  $apache_logfile = '*.log',
+  $apache_logoptions = [],
 ) {
   include apache
   include jeepyb
@@ -618,6 +621,12 @@ class gerrit(
                   'bcpkix-*.jar'],
       before  => Exec['gerrit-start'],
     }
+  }
+
+  include logrotate
+  logrotate::file { '${apache_logdir}/apache2':
+    log     => '${apache_logdir}/${apache_logfile}',
+    options => $apache_logoptions,
   }
 
   # Symlink the init script.

@@ -159,6 +159,7 @@ class gerrit(
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
+  $apache_logrotate = true,
 ) {
   include apache
   include jeepyb
@@ -617,6 +618,31 @@ class gerrit(
                   'bcpg-*.jar',
                   'bcpkix-*.jar'],
       before  => Exec['gerrit-start'],
+    }
+  }
+
+  # apache logrotation if needed
+  if $apache_logrotate {
+    include logrotate
+
+    if $::osfamily  == 'RedHat' {
+      $apache_logdir = '/var/log/httpd'
+    }
+    else {
+      $apache_logdir = '/var/log/apache2'
+    }
+    logrotate::file { "${apache_logdir}/gerrit_apache2":
+      log     => "${apache_logdir}/*.log",
+      options => [
+        'daily',
+        'missingok',
+        'rotate 30',
+        'compress',
+        'delaycompress',
+        'notifempty',
+        'create 640 root adm',
+        'sharedscripts',
+      ]
     }
   }
 

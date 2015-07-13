@@ -620,6 +620,25 @@ class gerrit(
     }
   }
 
+  }
+    include logrotate
+    logrotate::file { '*.log':
+      log     => '/var/log/apache2/*.log',
+      options => [
+        'weekly',
+        'missingok',
+        'rotate 4',
+        'compress',
+        'delaycompress',
+        'notifempty',
+        'create 640 root adm',
+        'shared scripts',
+      ],
+      require => Exec['/etc/logrotate.d/apache2'],
+    }
+  }
+
+
   # Symlink the init script.
   file { '/etc/init.d/gerrit':
     ensure  => link,

@@ -623,6 +623,19 @@ class gerrit(
     }
   }
 
+  class { '::httpd::logrotate':
+    options => [
+      'daily',
+      'missingok',
+      'rotate 30',
+      'compress',
+      'delaycompress',
+      'notifempty',
+      'create 640 root adm',
+      'sharedscripts',
+    ],
+  }
+
   # Symlink the init script.
   file { '/etc/init.d/gerrit':
     ensure  => link,

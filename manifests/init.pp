@@ -160,7 +160,7 @@ class gerrit(
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
 ) {
-  include apache
+  include ::httpd
   include jeepyb
   include pip
 
@@ -354,24 +354,24 @@ class gerrit(
   # - $replicate_path
   # - $contactstore
   # - $robots_txt_source
-  apache::vhost { $vhost_name:
+  httpd::vhost { $vhost_name:
     port     => 443,
     docroot  => 'MEANINGLESS ARGUMENT',
     priority => '50',
     template => 'gerrit/gerrit.vhost.erb',
     ssl      => true,
   }
-  a2mod { 'rewrite':
+  httpd_mod { 'rewrite':
     ensure => present,
   }
-  a2mod { 'proxy':
+  httpd_mod { 'proxy':
     ensure => present,
   }
-  a2mod { 'proxy_http':
+  httpd_mod { 'proxy_http':
     ensure => present,
   }
-  if ! defined(A2mod['cgi']) {
-    a2mod { 'cgi':
+  if ! defined(Httpd_mod['cgi']) {
+    httpd_mod { 'cgi':
       ensure => present,
     }
   }
@@ -382,7 +382,7 @@ class gerrit(
       group   => 'root',
       mode    => '0640',
       content => $ssl_cert_file_contents,
-      before  => Apache::Vhost[$vhost_name],
+      before  => Httpd::Vhost[$vhost_name],
     }
   }
 
@@ -392,7 +392,7 @@ class gerrit(
       group   => 'ssl-cert',
       mode    => '0640',
       content => $ssl_key_file_contents,
-      before  => Apache::Vhost[$vhost_name],
+      before  => Httpd::Vhost[$vhost_name],
     }
   }
 
@@ -402,7 +402,7 @@ class gerrit(
       group   => 'root',
       mode    => '0640',
       content => $ssl_chain_file_contents,
-      before  => Apache::Vhost[$vhost_name],
+      before  => Httpd::Vhost[$vhost_name],
     }
   }
 

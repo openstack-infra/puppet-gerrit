@@ -160,9 +160,9 @@ class gerrit(
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
 ) {
-  include apache
-  include jeepyb
-  include pip
+  include ::apache
+  include ::jeepyb
+  include ::pip
 
   $java_home = $::lsbdistcodename ? {
     'precise' => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
@@ -180,7 +180,7 @@ class gerrit(
   $gerrit_war = '/home/gerrit2/review_site/bin/gerrit.war'
   $gerrit_site = '/home/gerrit2/review_site'
 
-  include gerrit::user
+  include ::gerrit::user
 
   if ($gitweb) {
     package { 'gitweb':
@@ -408,11 +408,11 @@ class gerrit(
 
   if $robots_txt_source != '' {
     file { '/home/gerrit2/review_site/static/robots.txt':
-      owner    => 'root',
-      group    => 'root',
-      mode     => '0444',
-      source   => $robots_txt_source,
-      require  => File['/home/gerrit2/review_site/static'],
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0444',
+      source  => $robots_txt_source,
+      require => File['/home/gerrit2/review_site/static'],
     }
   }
 
@@ -672,10 +672,10 @@ class gerrit(
     ensure => present,
   }
   file { '/home/gerrit2/review_site/lib/mysql-connector-java.jar':
-    ensure   => link,
-    target   => '/usr/share/java/mysql-connector-java.jar',
-    before   => Exec['gerrit-start'],
-    require  => [
+    ensure  => link,
+    target  => '/usr/share/java/mysql-connector-java.jar',
+    before  => Exec['gerrit-start'],
+    require => [
       Package['libmysql-java'],
       File['/home/gerrit2/review_site/lib'],
     ],
@@ -730,10 +730,10 @@ class gerrit(
         ensure => present,
       }
       file { '/home/gerrit2/review_site/lib/bcpkix.jar':
-        ensure   => link,
-        target   => '/usr/share/java/bcpkix.jar',
-        before   => Exec['gerrit-start'],
-        require  => [
+        ensure  => link,
+        target  => '/usr/share/java/bcpkix.jar',
+        before  => Exec['gerrit-start'],
+        require => [
           Package['libbcpkix-java'],
           File['/home/gerrit2/review_site/lib'],
         ],
@@ -756,10 +756,10 @@ class gerrit(
         ensure => present,
       }
       file { '/home/gerrit2/review_site/lib/bcpg.jar':
-        ensure   => link,
-        target   => '/usr/share/java/bcpg.jar',
-        before   => Exec['gerrit-start'],
-        require  => [
+        ensure  => link,
+        target  => '/usr/share/java/bcpg.jar',
+        before  => Exec['gerrit-start'],
+        require => [
           Package['libbcpg-java'],
           File['/home/gerrit2/review_site/lib'],
         ],

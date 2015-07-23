@@ -7,14 +7,14 @@ class gerrit::mysql(
   $database_password = '',
 ) {
 
-  class { 'mysql::server':
+  class { '::mysql::server':
     config_hash => {
       'root_password'  => $mysql_root_password,
       'default_engine' => 'InnoDB',
       'bind_address'   => '127.0.0.1',
     }
   }
-  include mysql::server::account_security
+  include ::mysql::server::account_security
 
   mysql::db { $database_name:
     user     => $database_user,

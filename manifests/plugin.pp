@@ -27,7 +27,7 @@ define gerrit::plugin(
   $plugin_parent_dir = '/home/gerrit2/review_site'
   $base_url          = "http://tarballs.openstack.org/ci/gerrit/plugins/${name}"
 
-  include gerrit::user
+  include ::gerrit::user
 
   # This directory is used to download and cache gerrit plugin files.
   # That way the download and install steps are kept separate.
@@ -68,11 +68,11 @@ define gerrit::plugin(
   }
 
   exec { "install-${base_plugin}":
-    command  => "cp ${plugin_cache_dir}/${plugin} ${plugin_dir}/${base_plugin}",
-    path     => ['/bin','/usr/bin', '/usr/sbin', '/usr/local/bin'],
-    require  => Exec["download-${plugin}"],
-    user     => 'gerrit2',
-    unless   => "test -f ${plugin_dir}/${base_plugin}",
+    command => "cp ${plugin_cache_dir}/${plugin} ${plugin_dir}/${base_plugin}",
+    path    => ['/bin','/usr/bin', '/usr/sbin', '/usr/local/bin'],
+    require => Exec["download-${plugin}"],
+    user    => 'gerrit2',
+    unless  => "test -f ${plugin_dir}/${base_plugin}",
   }
 
 }

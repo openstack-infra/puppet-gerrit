@@ -28,6 +28,7 @@
 #     gerrit.conf value for sendemail.from.
 #   database_poollimit:
 #   container_heaplimit:
+#   container_javaoptions:
 #   core_packedgitopenfiles:
 #   core_packedgitlimit:
 #   core_packedgitwindowsize:
@@ -131,6 +132,7 @@ class gerrit(
   $sendemail_from = 'MIXED',
   $database_poollimit = '',
   $container_heaplimit = '',
+  $container_javaoptions = '',
   $core_packedgitopenfiles = '',
   $core_packedgitlimit = '',
   $core_packedgitwindowsize = '',
@@ -299,6 +301,7 @@ class gerrit(
   # - $sendmail_from
   # - $java_home
   # - $container_heaplimit
+  # - $container_javaoptions
   # - $core_packedgitopenfiles
   # - $core_packedgitlimit
   # - $core_packedgitwindowsize

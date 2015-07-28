@@ -1,0 +1,11 @@
+Code-Review+2: James E. Blair <corvus@inaugust.com>
+Verified+2: Jenkins
+Code-Review+1: Paul Belanger <pabelanger@redhat.com>
+Code-Review+1: K Jonathan Harker <code@gentlydownthe.net>
+Workflow+1: Spencer Krum <nibz@spencerkrum.com>
+Code-Review+1: Clint Adams <clint@gcfm.net>
+Submitted-by: Jenkins
+Submitted-at: Tue, 28 Jul 2015 16:22:42 +0000
+Reviewed-on: https://review.openstack.org/190057
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

@@ -1,6 +1,9 @@
 # == Class: gerrit::cron
 #
-class gerrit::cron {
+class gerrit::cron (
+  $replicate_local = true,
+  $local_git_dir = '/opt/lib/git',
+) {
 
   cron { 'gerrit_repack':
     user        => 'gerrit2',
@@ -9,6 +12,18 @@ class gerrit::cron {
     minute      => '7',
     command     => 'find /home/gerrit2/review_site/git/ -type d -name "*.git" -print -exec git --git-dir="{}" repack -afd \;',
     environment => 'PATH=/usr/bin:/bin:/usr/sbin:/sbin',
+  }
+
+  # if local replication is enabled, repack this mirror as well
+  if $replicate_local {
+    cron { 'mirror_repack_local':
+      user        => 'gerrit2',
+      weekday     => '0',
+      hour        => '4',
+      minute      => '17',
+      command     => "find ${local_git_dir} -type d -name \"*.git\" -print -exec git --git-dir=\"{}\" repack -afd \\;",
+      environment => 'PATH=/usr/bin:/bin:/usr/sbin:/sbin',
+    }
   }
 
   cron { 'expireoldreviews':

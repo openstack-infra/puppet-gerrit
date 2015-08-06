@@ -788,4 +788,12 @@ class gerrit(
       require => File['/home/gerrit2/review_site/lib'],
     }
   }
+
+  # create local replication directory if needed
+  if $replicate_local {
+    file { $replicate_path:
+      ensure  => directory,
+      owner   => 'gerrit2',
+    }
+  }
 }

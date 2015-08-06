@@ -210,10 +210,10 @@ class gerrit(
 
   if ((!defined(File['/opt/lib']))
       and ($replicate_path =~ /^\/opt\/lib\/.*$/)) {
-    file { '/opt/lib':
+    ensure_resource('file', '/opt/lib', {
       ensure => directory,
       owner  => root,
-    }
+    })
   }
 
   # Prepare gerrit directories.  Even though some of these would be created
@@ -786,6 +786,14 @@ class gerrit(
       mode    => '0555',
       source  => 'puppet:///modules/gerrit/fakestore.cgi',
       require => File['/home/gerrit2/review_site/lib'],
+    }
+  }
+
+  # create local replication directory if needed
+  if $replicate_local {
+    file { $replicate_path:
+      ensure => directory,
+      owner  => 'gerrit2',
     }
   }
 }

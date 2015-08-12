@@ -1,0 +1,10 @@
+Code-Review+2: James E. Blair <corvus@inaugust.com>
+Workflow+1: James E. Blair <corvus@inaugust.com>
+Code-Review+2: Monty Taylor <mordred@inaugust.com>
+Verified+2: Jenkins
+Code-Review+1: Colleen Murphy <colleen@gazlene.net>
+Submitted-by: Jenkins
+Submitted-at: Wed, 12 Aug 2015 19:28:28 +0000
+Reviewed-on: https://review.openstack.org/209929
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

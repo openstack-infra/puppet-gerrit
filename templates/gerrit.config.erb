@@ -49,6 +49,9 @@
 	heapLimit = <%= @container_heaplimit %>
 <% end -%>
 [core]
+<% if @core_loggingbuffersize != "" -%>
+	asyncLoggingBufferSize = <%= @core_loggingbuffersize %>
+<% end -%>
 <% if @core_packedgitopenfiles != "" -%>
 	packedGitOpenFiles = <%= @core_packedgitopenfiles %>
 <% end -%>

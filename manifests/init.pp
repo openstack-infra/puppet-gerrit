@@ -29,6 +29,7 @@
 #   database_poollimit:
 #   container_heaplimit:
 #   container_javaoptions:
+#   core_loggingbuffersize:
 #   core_packedgitopenfiles:
 #   core_packedgitlimit:
 #   core_packedgitwindowsize:
@@ -133,8 +134,9 @@ class gerrit(
   $database_poollimit = '',
   $container_heaplimit = '',
   $container_javaoptions = '',
-  $core_packedgitopenfiles = '',
+  $core_loggingbuffersize = '',
   $core_packedgitlimit = '',
+  $core_packedgitopenfiles = '',
   $core_packedgitwindowsize = '',
   $sshd_threads = '',
   $sshd_listen_address = '*:29418',

@@ -1,16 +1,12 @@
 require 'beaker-rspec'
 
-hosts.each do |host|
-
-  install_puppet
-
-  on host, "mkdir -p #{host['distmoduledir']}"
-end
-
 RSpec.configure do |c|
   # Project root
   proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-  modname = JSON.parse(open('metadata.json').read)['name'].split('-')[1]
+  mod_name = JSON.parse(open('metadata.json').read)['name'].split('-')[1]
+  # Default puppet module
+  puppet_module_path = File.join(proj_root, 'spec', 'acceptance', 'fixtures', 'default.pp')
+  default_puppet_module = File.read(puppet_module_path)
 
   # Readable test descriptions
   c.formatter = :documentation
@@ -19,11 +15,13 @@ RSpec.configure do |c|
   c.before :suite do
     # Install module and dependencies
     hosts.each do |host|
+      # Install puppet
+      install_puppet_on(host)
 
       # Clean out any module cruft
-      shell('rm -fr /etc/puppet/modules/*')
+      on host, "rm -fr #{host['distmoduledir']}/*"
 
-      # install git
+      # Install git
       install_package host, 'git'
 
       zuul_ref = ENV['ZUUL_REF']
@@ -46,13 +44,15 @@ RSpec.configure do |c|
       end
 
       on host, "ZUUL_REF=#{zuul_ref} ZUUL_BRANCH=#{zuul_branch} ZUUL_URL=#{zuul_url} bash #{repo}/tools/install_modules_acceptance.sh"
-      on host, "rm -fr /etc/puppet/modules/#{modname}"
+      on host, "rm -fr #{host['distmoduledir']}/#{mod_name}"
 
       # Install the module being tested
-      puppet_module_install(:source => proj_root, :module_name => modname)
+      puppet_module_install(:source => proj_root, :module_name => mod_name)
       on host, "rm -fr #{repo}"
+
       # List modules installed to help with debugging
-      on hosts[0], puppet('module','list'), { :acceptable_exit_codes => 0 }
+      on host, puppet('module','list'), { :acceptable_exit_codes => 0 }
+      apply_manifest_on host, default_puppet_module
     end
   end
 end

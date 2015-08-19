@@ -1,8 +1,8 @@
 require 'beaker-rspec'
+require_relative 'support/puppet_helper.rb'
 
 hosts.each do |host|
-
-  install_puppet
+  install_puppet_on(host)
 
   on host, "mkdir -p #{host['distmoduledir']}"
 end
@@ -42,7 +42,7 @@ RSpec.configure do |c|
         zuul_clone_cmd += "git://git.openstack.org #{repo}"
         on host, zuul_clone_cmd
       else
-        on host, "git clone https://git.openstack.org/#{repo}"
+        on host, "git clone https://git.openstack.org/#{repo} #{repo}"
       end
 
       on host, "ZUUL_REF=#{zuul_ref} ZUUL_BRANCH=#{zuul_branch} ZUUL_URL=#{zuul_url} bash #{repo}/tools/install_modules_acceptance.sh"
@@ -52,7 +52,7 @@ RSpec.configure do |c|
       puppet_module_install(:source => proj_root, :module_name => modname)
       on host, "rm -fr #{repo}"
       # List modules installed to help with debugging
-      on hosts[0], puppet('module','list'), { :acceptable_exit_codes => 0 }
+      on host, puppet('module','list'), { :acceptable_exit_codes => 0 }
     end
   end
 end

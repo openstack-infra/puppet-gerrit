@@ -165,8 +165,8 @@ class gerrit(
   $enable_javamelody_top_menu = false,
 ) {
   include ::httpd
+  include ::python
   include ::jeepyb
-  include ::pip
 
   $java_home = $::lsbdistcodename ? {
     'precise' => '/usr/lib/jvm/java-7-openjdk-amd64/jre',

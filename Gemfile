@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 group :development, :test do
+  gem 'beaker-rspec', :require => false
   gem 'puppetlabs_spec_helper', :require => false
 
   gem 'metadata-json-lint'

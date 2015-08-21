@@ -368,16 +368,20 @@ class gerrit(
   }
   httpd_mod { 'rewrite':
     ensure => present,
+    before => Service['httpd'],
   }
   httpd_mod { 'proxy':
     ensure => present,
+    before => Service['httpd'],
   }
   httpd_mod { 'proxy_http':
     ensure => present,
+    before => Service['httpd'],
   }
   if ! defined(Httpd_mod['cgi']) {
     httpd_mod { 'cgi':
       ensure => present,
+      before => Service['httpd'],
     }
   }
 

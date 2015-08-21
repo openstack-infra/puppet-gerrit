@@ -22,4 +22,9 @@ defaultForceUpdate = <%= @replication_force_update %>
 <% if replication['mirror'] != nil -%>
 	mirror = <%= replication['mirror'] %>
 <% end -%>
+<% if replication['projects'] != nil -%>
+<% replication['projects'].each do |project| -%>
+	projects = <%= project %>
+<% end -%>
+<% end -%>
 <% end -%>

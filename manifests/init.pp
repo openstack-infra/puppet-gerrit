@@ -366,17 +366,17 @@ class gerrit(
     template => 'gerrit/gerrit.vhost.erb',
     ssl      => true,
   }
-  httpd_mod { 'rewrite':
+  httpd::mod { 'rewrite':
     ensure => present,
   }
-  httpd_mod { 'proxy':
+  httpd::mod { 'proxy':
     ensure => present,
   }
-  httpd_mod { 'proxy_http':
+  httpd::mod { 'proxy_http':
     ensure => present,
   }
-  if ! defined(Httpd_mod['cgi']) {
-    httpd_mod { 'cgi':
+  if ! defined(Httpd::Mod['cgi']) {
+    httpd::mod { 'cgi':
       ensure => present,
     }
   }

@@ -1,3 +1,8 @@
+# Installing ssl-cert in order to get snakeoil certs
+package { 'ssl-cert':
+  ensure => present,
+}
+
 # method to create ssh directory
 define create_ssh_key_directory() {
   Exec { path => '/bin:/usr/bin' }
@@ -21,7 +26,19 @@ define ssh_keygen (
 }
 
 $ssh_key_directory = '/tmp/gerrit-ssh-keys'
-create_ssh_key_directory { $ssh_key_directory: }
-ssh_keygen {'ssh_rsa_key': ssh_directory => $ssh_key_directory }
-ssh_keygen {'ssh_project_rsa_key': ssh_directory => $ssh_key_directory }
-ssh_keygen {'ssh_replication_rsa_key': ssh_directory => $ssh_key_directory }
+file { $ssh_key_directory:
+  ensure => directory,
+}
+
+ssh_keygen {'ssh_rsa_key':
+  ssh_directory => $ssh_key_directory,
+  require       => File[$ssh_key_directory],
+}
+ssh_keygen {'ssh_project_rsa_key':
+  ssh_directory => $ssh_key_directory,
+  require       => File[$ssh_key_directory],
+}
+ssh_keygen {'ssh_replication_rsa_key':
+  ssh_directory => $ssh_key_directory,
+  require       => File[$ssh_key_directory],
+}

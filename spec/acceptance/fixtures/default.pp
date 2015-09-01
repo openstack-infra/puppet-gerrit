@@ -30,6 +30,8 @@ class { '::gerrit':
   ssh_project_rsa_pubkey_contents     => file('/tmp/gerrit-ssh-keys/ssh_project_rsa_key.pub'),
   ssh_replication_rsa_key_contents    => file('/tmp/gerrit-ssh-keys/ssh_replication_rsa_key'),
   ssh_replication_rsa_pubkey_contents => file('/tmp/gerrit-ssh-keys/ssh_replication_rsa_key.pub'),
+  secondary_index                     => true,
+  secondary_index_type                => 'LUCENE',
 }
 
 class { '::gerrit::cron': }

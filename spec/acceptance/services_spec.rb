@@ -1,12 +1,7 @@
 require 'spec_helper_acceptance'
 
-describe 'operating system services' do
-  describe service('apache2'), :if => ['debian', 'ubuntu'].include?(os[:family]) do
-    it { should be_enabled }
-    it { should be_running }
-  end
-
-  describe service('httpd'), :if => ['centos', 'redhat'].include?(os[:family]) do
+describe 'operating system services', :if => ['debian', 'ubuntu'].include?(os[:family]) do
+  describe service('apache2') do
     it { should be_enabled }
     it { should be_running }
   end

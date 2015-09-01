@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'operating system packages' do
+describe 'operating system packages', :if => ['debian', 'ubuntu'].include?(os[:family]) do
   shared_examples "a required package is installed" do |packages|
     packages.each do |package|
       describe package(package) do

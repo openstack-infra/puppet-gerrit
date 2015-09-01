@@ -1,14 +1,14 @@
 require 'spec_helper_acceptance'
 
-describe 'basic gerrit' do
+describe 'basic gerrit', :if => ['debian', 'ubuntu'].include?(os[:family]) do
   context 'module is working' do
     def pp_path
       base_path = File.dirname(__FILE__)
       File.join(base_path, 'fixtures')
     end
 
-    def ssh_keygen_puppet_module
-      module_path = File.join(pp_path, 'ssh_keygen.pp')
+    def preconditions_puppet_module
+      module_path = File.join(pp_path, 'preconditions.pp')
       File.read(module_path)
     end
 
@@ -18,7 +18,7 @@ describe 'basic gerrit' do
     end
 
     before(:all) do
-      apply_manifest(ssh_keygen_puppet_module, catch_failures: true)
+      apply_manifest(preconditions_puppet_module, catch_failures: true)
     end
 
     it 'should work with no errors' do

@@ -1,3 +1,23 @@
+# workaround since ssl-cert group is not being installed as part of
+# this module
+package { 'ssl-cert':
+  ensure => present,
+}
+
+# workaround since pip is not being installed as part of this module
+exec { 'download get-pip.py':
+  command => 'wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py',
+  path    => '/bin:/usr/bin:/usr/local/bin',
+  creates => '/tmp/get-pip.py',
+}
+
+exec { 'install pip using get-pip':
+  command     => 'python /tmp/get-pip.py',
+  path        => '/bin:/usr/bin:/usr/local/bin',
+  refreshonly => true,
+  subscribe   => Exec['download get-pip.py'],
+}
+
 # method to create ssh directory
 define create_ssh_key_directory() {
   Exec { path => '/bin:/usr/bin' }

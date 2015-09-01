@@ -1,3 +1,21 @@
+# workaround since ssl-cert group is not being installed as part of
+# this module
+package { 'ssl-cert':
+  ensure => present,
+}
+
+# workaround since pip is not being installed as part of this module
+package { 'python-setuptools' :
+  ensure => present,
+}
+
+exec { 'install pip using easy_install':
+  command     => 'easy_install -U pip',
+  path        => '/bin:/usr/bin:/usr/local/bin',
+  refreshonly => true,
+  subscribe   => Packge['python-setuptools'],
+}
+
 # method to create ssh directory
 define create_ssh_key_directory() {
   Exec { path => '/bin:/usr/bin' }

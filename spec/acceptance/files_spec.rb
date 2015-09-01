@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'required files and directories' do
+describe 'required files and directories', :if => ['debian', 'ubuntu'].include?(os[:family]) do
   describe file('/home/gerrit2/review_site/etc/gerrit.config') do
     it { should be_file }
     it { should contain('javaHome = /usr/lib/jvm/java-7-openjdk-amd64/jre') }

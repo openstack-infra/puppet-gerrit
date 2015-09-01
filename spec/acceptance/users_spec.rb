@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-describe 'user' do
+describe 'user', :if => ['debian', 'ubuntu'].include?(os[:family]) do
   describe user('gerrit2') do
     it { should exist }
     it { should belong_to_group 'gerrit2' }

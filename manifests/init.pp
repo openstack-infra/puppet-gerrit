@@ -557,7 +557,7 @@ class gerrit(
   # If gerrit.war was just installed, run the Gerrit "init" command.
   exec { 'gerrit-initial-init':
     user        => 'gerrit2',
-    command     => "/usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start; /usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site}",
+    command     => "/usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start",
     subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
     refreshonly => true,
     require     => [Package['openjdk-7-jre-headless'],
@@ -569,21 +569,33 @@ class gerrit(
     logoutput   => true,
   }
 
+  if ($secondary_index) {
+    exec { 'gerrit-reindex':
+      user        => 'gerrit2',
+      command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site}",
+      subscribe   => [File['/home/gerrit2/review_site/bin/gerrit.war'],
+                      Exec['gerrit-initial-init'],
+                      Exec['gerrit-init']],
+      refreshonly => true,
+      logoutput   => true,
+    }
+  }
+
   # If a new gerrit.war was just installed, run the Gerrit "init" command.
   # Stop is included here because it may not be running or the init
   # script may not exist, and in those cases, we don't care if it fails.
   # Running the init script as the gerrit2 user _does_ work.
   exec { 'gerrit-init':
     user        => 'gerrit2',
-    command     => "/etc/init.d/gerrit stop; /usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start; /usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site}",
+    command     => "/etc/init.d/gerrit stop; /usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start",
     subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
     refreshonly => true,
     require     => [Package['openjdk-7-jre-headless'],
                     User['gerrit2'],
                     File['/home/gerrit2/review_site/etc/gerrit.config'],
                     File['/home/gerrit2/review_site/etc/secure.config']],
-    notify      => Exec['install-core-plugins'],
     onlyif      => '/usr/bin/test -f /etc/init.d/gerrit',
+    notify      => Exec['install-core-plugins'],
     logoutput   => true,
   }
 

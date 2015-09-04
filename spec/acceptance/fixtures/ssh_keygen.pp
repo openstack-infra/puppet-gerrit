@@ -1,3 +1,4 @@
+# method to create ssh directory
 define create_ssh_key_directory() {
   Exec { path => '/bin:/usr/bin' }
   exec { "create temporary ${name} directory":
@@ -5,6 +6,7 @@ define create_ssh_key_directory() {
   }
 }
 
+# method to generate key
 define ssh_keygen (
   $ssh_directory = undef
 ) {

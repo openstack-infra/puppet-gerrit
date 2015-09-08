@@ -171,6 +171,8 @@ class gerrit(
   $enable_javamelody_top_menu = false,
   $manage_jeepyb = true,
   $reindex_threads = $::processorcount/2,
+  $report_bug_text = 'Report Bug',
+  $report_bug_url = '',
 ) {
   include ::httpd
 
@@ -333,6 +335,8 @@ class gerrit(
   # - web_repo_url_encode
   # - $contactstore_appsec
   # - $contactstore_url
+  # - $report_bug_text
+  # - $report_bug_url
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

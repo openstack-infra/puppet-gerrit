@@ -165,6 +165,8 @@ class gerrit(
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
   $manage_jeepyb = true,
+  $report_bug_text = 'Report Bug',
+  $report_bug_url = '',
 ) {
   include ::httpd
 
@@ -325,6 +327,8 @@ class gerrit(
   # - $gitweb
   # - $contactstore_appsec
   # - $contactstore_url
+  # - $report_bug_text
+  # - $report_bug_url
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

@@ -4,6 +4,10 @@
 #     The mysql host to which gerrit should connect.
 #   mysql_password:
 #     The password with which gerrit connects to mysql.
+#   report_bug_text:
+#     The text that would replace 'Report Bug' on the Gerrit UI.
+#   report_bug_url:
+#     The link for the report_bug_text.
 #   vhost_name:
 #     used in the Apache virtual host, eg., review.example.com
 #   canonicalweburl:
@@ -95,6 +99,8 @@
 class gerrit(
   $mysql_host = 'localhost',
   $mysql_password,
+  $report_bug_url,
+  $report_bug_text = 'Report Bug',
   $war = '',
   $email_private_key = '',
   $token_private_key = '',
@@ -320,6 +326,8 @@ class gerrit(
   # - $gitweb
   # - $contactstore_appsec
   # - $contactstore_url
+  # - $report_bug_text
+  # - $report_bug_url
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

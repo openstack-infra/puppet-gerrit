@@ -163,9 +163,13 @@ class gerrit(
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
+  $manage_jeepyb = true,
 ) {
   include ::httpd
-  include ::jeepyb
+
+  if $manage_jeepyb {
+    include ::jeepyb
+  }
   include ::pip
 
   $java_home = $::lsbdistcodename ? {

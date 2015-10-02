@@ -121,6 +121,7 @@ class gerrit(
   $openidssourl = 'https://login.launchpad.net/+openid',
   $ldap_server = '',
   $ldap_account_base = '',
+  $ldap_group_base = '',
   $ldap_username = '',
   $ldap_password = '',
   $ldap_account_pattern = '',

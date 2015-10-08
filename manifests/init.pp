@@ -6,6 +6,9 @@
 #     The password with which gerrit connects to mysql.
 #   vhost_name:
 #     used in the Apache virtual host, eg., review.example.com
+#   redirect_to_canonicalweburl:
+#     Boolean value to determine whether or not mod_rewrite should redirect
+#     requests to the canonicalweburl
 #   canonicalweburl:
 #     Used in the Gerrit config to generate links,
 #       eg., https://review.example.com/
@@ -99,6 +102,7 @@ class gerrit(
   $email_private_key = '',
   $token_private_key = '',
   $vhost_name = $::fqdn,
+  $redirect_to_canonicalweburl = true,
   $canonicalweburl = "https://${::fqdn}/",
   $robots_txt_source = '', # If left empty, the gerrit default will be used.
   $serveradmin = "webmaster@${::fqdn}",
@@ -355,6 +359,7 @@ class gerrit(
   # - $ssl_key_file
   # - $ssl_chain_file
   # - $canonicalweburl
+  # - $redirect_to_canonicalweburl
   # - $replicate_local
   # - $replicate_path
   # - $contactstore

@@ -47,8 +47,10 @@
   BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
 
   RewriteEngine on
+<% if scope.lookupvar("gerrit::redirect_to_canonicalweburl") -%>
   RewriteCond %{HTTP_HOST} !<%= scope.lookupvar("gerrit::vhost_name") %>
   RewriteRule ^.*$ <%= scope.lookupvar("gerrit::canonicalweburl") %>
+<% end -%>
 <% if scope.lookupvar("gerrit::replicate_local") -%>
   RewriteCond %{REQUEST_URI} !^/p/
 <% end -%>

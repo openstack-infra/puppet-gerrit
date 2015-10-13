@@ -650,7 +650,7 @@ class gerrit(
     options => [
       'daily',
       'missingok',
-      'rotate 30',
+      'rotate 10',
       'compress',
       'delaycompress',
       'notifempty',

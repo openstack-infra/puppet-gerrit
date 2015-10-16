@@ -126,6 +126,7 @@
 <% end -%>
 <% if  scope.lookupvar("gerrit::web_repo_url") -%>
 	url = "<%= scope.lookupvar('gerrit::web_repo_url') %>"
+	urlEncode = <%= @web_repo_url_encode %>
 <% end -%>
 <% end -%>
 <% if @contactstore == true -%>

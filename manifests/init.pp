@@ -80,6 +80,8 @@
 #     A boolean enabling cgit
 #   web_repo_url:
 #     Url for setting the location of an external git browser
+#   web_repo_url_encode:
+#     Whether or not Gerrit should encode the generated viewer URL.
 #   testmode:
 #     Set this to true to disable cron jobs and replication,
 #     which can interfere with testing.
@@ -160,6 +162,7 @@ class gerrit(
   $gitweb = true,
   $cgit = false,
   $web_repo_url = '',
+  $web_repo_url_encode = true,
   $testmode = false,
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
@@ -323,6 +326,8 @@ class gerrit(
   # - $enable_melody
   # - $melody_session
   # - $gitweb
+  # - web_repo_url
+  # - web_repo_url_encode
   # - $contactstore_appsec
   # - $contactstore_url
   file { '/home/gerrit2/review_site/etc/gerrit.config':

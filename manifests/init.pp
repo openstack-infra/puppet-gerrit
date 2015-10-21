@@ -92,6 +92,8 @@
 #     LUCENE (recommended), SOLR (experimental). Note: as of
 #     Gerrit 2.9 LUCENE is default secondary index and SQL is
 #     removed.
+#   reindex_threads:
+#     The number of threads to use for reindexing Gerrit data
 # TODO: make more gerrit options configurable here
 #
 class gerrit(
@@ -168,6 +170,7 @@ class gerrit(
   $secondary_index_type = 'LUCENE',
   $enable_javamelody_top_menu = false,
   $manage_jeepyb = true,
+  $reindex_threads = $::processorcount/2,
 ) {
   include ::httpd
 
@@ -582,7 +585,7 @@ class gerrit(
   if ($secondary_index) {
     exec { 'gerrit-reindex':
       user        => 'gerrit2',
-      command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site}",
+      command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",
       subscribe   => [File['/home/gerrit2/review_site/bin/gerrit.war'],
                       Exec['gerrit-initial-init'],
                       Exec['gerrit-init']],

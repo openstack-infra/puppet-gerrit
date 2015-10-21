@@ -582,7 +582,7 @@ class gerrit(
   if ($secondary_index) {
     exec { 'gerrit-reindex':
       user        => 'gerrit2',
-      command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site}",
+      command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads 4",
       subscribe   => [File['/home/gerrit2/review_site/bin/gerrit.war'],
                       Exec['gerrit-initial-init'],
                       Exec['gerrit-init']],

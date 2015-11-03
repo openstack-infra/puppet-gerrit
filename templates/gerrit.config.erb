@@ -139,6 +139,9 @@
 <% if @secondary_index == true -%>
 [index]
 	type = <%= @secondary_index_type %>
+<% if @index_threads.to_i > 1 -%>
+	threads = <%= @index_threads %>
+<% end -%>
 <% end -%>
 [mimetype "image/*"]
         safe = true

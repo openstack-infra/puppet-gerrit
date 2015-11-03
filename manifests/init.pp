@@ -333,6 +333,8 @@ class gerrit(
   # - web_repo_url_encode
   # - $contactstore_appsec
   # - $contactstore_url
+  # - $secondary_index_type:
+  # - $reindex_threads:
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

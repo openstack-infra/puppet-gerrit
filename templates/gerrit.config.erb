@@ -28,14 +28,14 @@
 [ldap]
 	server = <%= @ldap_server %>
 	accountBase = <%= @ldap_account_base %>
-	<% if @ldap_group_base -%>groupBase = <%= @ldap_group_base %><%end%>
-	<% if @ldap_username -%>username = <%= @ldap_username %><%end%>
-	<% if @ldap_password -%>password = <%= @ldap_password %><%end%>
-	<% if @ldap_accountfullname -%>accountFullName = <%= @ldap_accountfullname %><%end%>
+	<% if @ldap_group_base and @ldap_group_base != '' -%>groupBase = <%= @ldap_group_base %><%end%>
+	<% if @ldap_username and @ldap_username != '' -%>username = <%= @ldap_username %><%end%>
+	<% if @ldap_password and @ldap_password != '' -%>password = <%= @ldap_password %><%end%>
+	<% if @ldap_accountfullname and @ldap_accountfullname != '' -%>accountFullName = <%= @ldap_accountfullname %><%end%>
 	accountPattern = <%= @ldap_account_pattern %>
 	accountEmailAddress = <%= @ldap_account_email_address %>
 	sslVerify = <%= @ldap_sslverify %>
-	<% if @ldap_ssh_account_name -%>accountSshUserName = <%= @ldap_ssh_account_name %><%end%>
+	<% if @ldap_ssh_account_name and @ldap_ssh_account_name != '' -%>accountSshUserName = <%= @ldap_ssh_account_name %><%end%>
 <% end %>
 [sendemail]
 	smtpServer = <%= @smtpserver %>

@@ -96,7 +96,9 @@
 #     Gerrit 2.9 LUCENE is default secondary index and SQL is
 #     removed.
 #   reindex_threads:
-#     The number of threads to use for reindexing Gerrit data
+#     The number of threads to use for full offline reindexing of Gerrit data
+#   index_threads:
+#     Number of threads to use for indexing in normal interactive operations
 # TODO: make more gerrit options configurable here
 #
 class gerrit(
@@ -177,6 +179,7 @@ class gerrit(
   $reindex_threads = $::processorcount/2,
   $report_bug_text = 'Report Bug',
   $report_bug_url = '',
+  $index_threads = '1',
 ) {
   include ::httpd
 
@@ -341,6 +344,9 @@ class gerrit(
   # - $contactstore_url
   # - $report_bug_text
   # - $report_bug_url
+  # - $secondary_index_type:
+  # - $reindex_threads:
+  # - $index_threads:
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

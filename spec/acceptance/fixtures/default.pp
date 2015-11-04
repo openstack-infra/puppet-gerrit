@@ -1,3 +1,18 @@
+# workaround since ssl-cert group is not being installed as part of
+# this module
+package { 'ssl-cert':
+  ensure => present,
+}
+
+exec { 'ensure ssl-cert exists':
+  command => '/usr/sbin/groupadd -f ssl-cert'
+}
+
+# workaround since pip is not being installed as part of this module
+package { 'python-pip':
+  ensure => present,
+}
+
 class { '::gerrit::mysql':
   mysql_root_password => 'UNSET',
   database_name       => 'reviewdb',

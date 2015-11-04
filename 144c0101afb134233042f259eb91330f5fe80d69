@@ -1,0 +1,11 @@
+Verified+2: Jenkins
+Code-Review+2: yolanda.robla <info@ysoft.biz>
+Code-Review+2: Colleen Murphy <colleen@gazlene.net>
+Workflow+1: Colleen Murphy <colleen@gazlene.net>
+Code-Review+1: Glauco Oliveira <gvinici@thoughtworks.com>
+Code-Review+1: Caio Carrara <ccarrara@thoughtworks.com>
+Submitted-by: Jenkins
+Submitted-at: Wed, 04 Nov 2015 01:01:29 +0000
+Reviewed-on: https://review.openstack.org/227571
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

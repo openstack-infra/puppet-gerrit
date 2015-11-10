@@ -29,7 +29,7 @@
 
   SSLCertificateFile      <%= scope.lookupvar("gerrit::ssl_cert_file") %>
   SSLCertificateKeyFile   <%= scope.lookupvar("gerrit::ssl_key_file") %>
-<% if scope.lookupvar("gerrit::ssl_chain_file") != "" %>
+<% if scope.lookupvar("gerrit::ssl_chain_file") != "" and scope.lookupvar("gerrit::ssl_chain_file_contents") != "" %>
   SSLCertificateChainFile <%= scope.lookupvar("gerrit::ssl_chain_file") %>
 <% end %>
 

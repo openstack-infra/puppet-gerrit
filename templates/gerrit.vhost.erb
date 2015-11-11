@@ -1,3 +1,8 @@
+# The version_module has to be available for IfVersion to be parsed,
+# so breaking alphabetical order and loading it first
+
+LoadModule version_module modules/mod_version.so
+
 <VirtualHost *:80>
   ServerName <%= scope.lookupvar("gerrit::vhost_name") %>
   ServerAdmin <%= scope.lookupvar("gerrit::serveradmin") %>
@@ -16,7 +21,7 @@
 <VirtualHost *:443>
   ServerName <%= scope.lookupvar("gerrit::vhost_name") %>
   ServerAdmin <%= scope.lookupvar("gerrit::serveradmin") %>
-  AllowEncodedSlashes NoDecode
+  AllowEncodedSlashes on
 
   ErrorLog ${APACHE_LOG_DIR}/gerrit-ssl-error.log
 
@@ -58,9 +63,21 @@
 <% if scope.lookupvar("gerrit::robots_txt_source") != "" -%>
   RewriteCond %{REQUEST_URI} !^/robots.txt$
 <% end -%>
-  RewriteRule ^/(.*)$ http://localhost:8081/$1 [NE,P]
 
-  ProxyPassReverse / http://localhost:8081/
+  ProxyRequests off
+  ProxyVia off
+  ProxyPreserveHost on
+  <Proxy *>
+<IfVersion < 2.4>
+    Order deny,allow
+    Allow from all
+</IfVersion>
+<IfVersion >= 2.4>
+    Require all granted
+</IfVersion>
+  </Proxy>
+
+  ProxyPass / http://localhost:8081/ nocanon
 
 <% if scope.lookupvar("gerrit::robots_txt_source") != "" -%>
   Alias /robots.txt /home/gerrit2/review_site/static/robots.txt

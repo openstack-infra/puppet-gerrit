@@ -47,6 +47,14 @@
   BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
 
   RewriteEngine on
+
+  # Strip out leading double slash if it occurs, this is to address
+  # gerrit issue https://code.google.com/p/gerrit/issues/detail?id=3365
+  # with the 2.11.X releases. This rewrite condition and rule can be
+  # removed once the bug is resolved.
+  RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ //+([^\ ]*)
+  RewriteRule .* http://%{HTTP_HOST}/%1 [R=301]
+
 <% if scope.lookupvar("gerrit::redirect_to_canonicalweburl") -%>
   RewriteCond %{HTTP_HOST} !<%= scope.lookupvar("gerrit::vhost_name") %>
   RewriteRule ^.*$ <%= scope.lookupvar("gerrit::canonicalweburl") %>

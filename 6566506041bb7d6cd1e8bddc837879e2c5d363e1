@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: yolanda.robla <info@ysoft.biz>
+Workflow+1: yolanda.robla <info@ysoft.biz>
+Code-Review+2: Spencer Krum <nibz@spencerkrum.com>
+Submitted-by: Jenkins
+Submitted-at: Tue, 01 Dec 2015 10:15:59 +0000
+Reviewed-on: https://review.openstack.org/241060
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

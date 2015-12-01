@@ -16,7 +16,7 @@
 <VirtualHost *:443>
   ServerName <%= scope.lookupvar("gerrit::vhost_name") %>
   ServerAdmin <%= scope.lookupvar("gerrit::serveradmin") %>
-  AllowEncodedSlashes NoDecode
+  AllowEncodedSlashes On
 
   ErrorLog ${APACHE_LOG_DIR}/gerrit-ssl-error.log
 
@@ -51,18 +51,21 @@
   RewriteCond %{HTTP_HOST} !<%= scope.lookupvar("gerrit::vhost_name") %>
   RewriteRule ^.*$ <%= scope.lookupvar("gerrit::canonicalweburl") %>
 <% end -%>
+
+  ProxyRequests off
+  ProxyVia off
+  ProxyPreserveHost on
+
 <% if scope.lookupvar("gerrit::replicate_local") -%>
-  RewriteCond %{REQUEST_URI} !^/p/
+  ProxyPassMatch ^/p/ !
 <% end -%>
 <% if scope.lookupvar("gerrit::contactstore") == true -%>
-  RewriteCond %{REQUEST_URI} !^/fakestore$
+  ProxyPassMatch ^/fakestore$ !
 <% end -%>
 <% if scope.lookupvar("gerrit::robots_txt_source") != "" -%>
-  RewriteCond %{REQUEST_URI} !^/robots.txt$
+  ProxyPassMatch ^/robots.txt$ !
 <% end -%>
-  RewriteRule ^/(.*)$ http://localhost:8081/$1 [NE,P]
-
-  ProxyPassReverse / http://localhost:8081/
+  ProxyPass / http://localhost:8081/ nocanon
 
 <% if scope.lookupvar("gerrit::robots_txt_source") != "" -%>
   Alias /robots.txt /home/gerrit2/review_site/static/robots.txt

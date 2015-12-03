@@ -99,6 +99,8 @@
 #     The number of threads to use for full offline reindexing of Gerrit data
 #   index_threads:
 #     Number of threads to use for indexing in normal interactive operations
+#   allow_drafts:
+#     Set this to false to disable drafts feature
 # TODO: make more gerrit options configurable here
 #
 class gerrit(
@@ -180,6 +182,7 @@ class gerrit(
   $report_bug_text = 'Report Bug',
   $report_bug_url = '',
   $index_threads = 1,
+  $allow_drafts = true,
 ) {
   include ::httpd
 
@@ -347,6 +350,7 @@ class gerrit(
   # - $secondary_index_type:
   # - $reindex_threads:
   # - $index_threads:
+  # - $allow_drafts:
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

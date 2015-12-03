@@ -180,6 +180,7 @@ class gerrit(
   $report_bug_text = 'Report Bug',
   $report_bug_url = '',
   $index_threads = 1,
+  $new_groups_visible_to_all = true,
 ) {
   include ::httpd
 
@@ -347,6 +348,7 @@ class gerrit(
   # - $secondary_index_type:
   # - $reindex_threads:
   # - $index_threads:
+  # - $new_groups_visible_to_all:
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

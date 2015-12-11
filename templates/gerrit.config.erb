@@ -89,6 +89,8 @@
 	maxAge = 1d
 [user]
 	email = <%= @email %>
+[change]
+	allowDrafts = <%= @allow_drafts %>
 <% @commentlinks.each do |commentlink| -%>
 [commentlink "<%= commentlink['name'] %>"]
 	match = "<%= commentlink['match'] %>"

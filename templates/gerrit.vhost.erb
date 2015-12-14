@@ -49,6 +49,7 @@
   RewriteEngine on
 <% if scope.lookupvar("gerrit::redirect_to_canonicalweburl") -%>
   RewriteCond %{HTTP_HOST} !<%= scope.lookupvar("gerrit::vhost_name") %>
+  RewriteCond %{REQUEST_URI} !^/server-status$
   RewriteRule ^.*$ <%= scope.lookupvar("gerrit::canonicalweburl") %>
 <% end -%>
 
@@ -65,6 +66,7 @@
 <% if scope.lookupvar("gerrit::robots_txt_source") != "" -%>
   ProxyPassMatch ^/robots.txt$ !
 <% end -%>
+  ProxyPassMatch ^/server-status
   ProxyPass / http://localhost:8081/ nocanon
   ProxyPassReverse / http://localhost:8081/
 

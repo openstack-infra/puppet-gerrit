@@ -72,7 +72,7 @@ define gerrit::plugin(
     path    => ['/bin','/usr/bin', '/usr/sbin', '/usr/local/bin'],
     require => Exec["download-${plugin}"],
     user    => 'gerrit2',
-    unless  => "test -f ${plugin_dir}/${base_plugin}",
+    unless  => "/usr/bin/diff -s ${plugin_cache_dir}/${plugin} ${plugin_dir}/${base_plugin} 2>/dev/null",
   }
 
 }

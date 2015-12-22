@@ -29,6 +29,8 @@
 #     The smtp server that Gerrit should send mail through.
 #   sendemail_from:
 #     gerrit.conf value for sendemail.from.
+#   sendemail_indclude_diff:
+#     Config emails to includes the complete unified diff of the change
 #   database_poollimit:
 #   container_heaplimit:
 #   container_javaoptions:
@@ -144,6 +146,7 @@ class gerrit(
   $email = '',
   $smtpserver = 'localhost',
   $sendemail_from = 'MIXED',
+  $sendemail_include_diff = false,
   $database_poollimit = '',
   $container_heaplimit = '',
   $container_javaoptions = '',
@@ -313,6 +316,9 @@ class gerrit(
   # Template uses:
   # - $mysql_host
   # - $canonicalweburl
+  # - $smtpserver
+  # - $sendemail_from
+  # - $sendemail_include_diff
   # - $database_poollimit
   # - $gerrit_contributor_agreement
   # - $gerrit_auth_type

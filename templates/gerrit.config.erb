@@ -51,6 +51,13 @@
 <% if @container_heaplimit != "" -%>
 	heapLimit = <%= @container_heaplimit %>
 <% end -%>
+[gc]
+<% if @gc_start_time != "" -%>
+	startTime = <%= @gc_start_time %>
+<% end -%>
+<% if @gc_interval != "" -%>
+	interval = <%= @gc_interval %>
+<% end -%>
 [core]
 <% if @core_loggingbuffersize != "" -%>
 	asyncLoggingBufferSize = <%= @core_loggingbuffersize %>

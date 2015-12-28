@@ -37,6 +37,8 @@
 #   core_packedgitlimit:
 #   core_packedgitwindowsize:
 #   sshd_threads:
+#   sshd_batch_threads:
+#     Number of threads for SSH command requests from non-interactive users
 #   sshd_listen_address:
 #   httpd_acceptorthreads:
 #   httpd_minthreads:
@@ -152,6 +154,7 @@ class gerrit(
   $core_packedgitopenfiles = '',
   $core_packedgitwindowsize = '',
   $sshd_threads = '',
+  $sshd_batch_threads = 0,
   $sshd_listen_address = '*:29418',
   $httpd_acceptorthreads = '',
   $httpd_minthreads = '',
@@ -333,6 +336,7 @@ class gerrit(
   # - $core_packedgitwindowsize
   # - $sshd_listen_address
   # - $sshd_threads
+  # - $sshd_batch_threads
   # - $httpd_maxwait
   # - $httpd_acceptorthreads
   # - $httpd_minthreads

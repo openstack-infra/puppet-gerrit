@@ -69,6 +69,9 @@
 <% if @sshd_threads != "" -%>
 	threads = <%= @sshd_threads %>
 <% end -%>
+<% if @sshd_batch_threads.to_i > 0 -%>
+	batchThreads = <%= @sshd_batch_threads %>
+<% end -%>
 [httpd]
 	listenUrl = proxy-https://*:8081/
 <% if @httpd_maxwait != "" -%>

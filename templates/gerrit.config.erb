@@ -82,6 +82,8 @@
 <% end -%>
 <% if @sshd_max_connections_per_user != "" -%>
 	maxConnectionsPerUser = <%= @sshd_max_connections_per_user %>
+<% if @sshd_batch_threads != "" -%>
+	batchThreads = <%= @sshd_batch_threads %>
 <% end -%>
 [httpd]
 	listenUrl = proxy-https://*:8081/

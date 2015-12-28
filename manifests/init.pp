@@ -43,6 +43,8 @@
 #   core_packedgitlimit:
 #   core_packedgitwindowsize:
 #   sshd_threads:
+#   sshd_batch_threads:
+#     Number of threads for SSH command requests from non-interactive users
 #   sshd_listen_address:
 #   sshd_idle_timeout:
 #       Server automatically terminates idle connections after this time
@@ -167,6 +169,7 @@ class gerrit(
   $core_packedgitopenfiles = '',
   $core_packedgitwindowsize = '',
   $sshd_threads = '',
+  $sshd_batch_threads = '',
   $sshd_listen_address = '*:29418',
   $sshd_idle_timeout = '',
   $sshd_max_connections_per_user = '',
@@ -360,6 +363,7 @@ class gerrit(
   # - $sshd_threads
   # - $sshd_idle_timeout
   # - $sshd_max_connections_per_user
+  # - $sshd_batch_threads
   # - $httpd_maxwait
   # - $httpd_acceptorthreads
   # - $httpd_minthreads

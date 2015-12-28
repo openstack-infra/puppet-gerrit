@@ -57,6 +57,7 @@
   ProxyVia off
   ProxyPreserveHost on
   ProxyStatus On
+  ProxyTimeout 30
 
 <% if scope.lookupvar("gerrit::replicate_local") -%>
   ProxyPassMatch ^/p/ !

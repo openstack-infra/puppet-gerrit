@@ -101,6 +101,8 @@
 #     Number of threads to use for indexing in normal interactive operations
 #   allow_drafts:
 #     Set this to false to disable drafts feature
+#   receive_max_object_size_limit
+#     Maximum allowed Git object size that 'receive-pack' will accept.
 # TODO: make more gerrit options configurable here
 #
 class gerrit(
@@ -184,6 +186,7 @@ class gerrit(
   $index_threads = 1,
   $new_groups_visible_to_all = true,
   $allow_drafts = true,
+  $receive_max_object_size_limit = '',
 ) {
   include ::httpd
 
@@ -353,6 +356,7 @@ class gerrit(
   # - $index_threads:
   # - $new_groups_visible_to_all:
   # - $allow_drafts:
+  # - $receive_max_object_size_limit
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

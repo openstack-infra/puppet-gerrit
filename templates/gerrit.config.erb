@@ -99,6 +99,10 @@
 	email = <%= @email %>
 [change]
 	allowDrafts = <%= @allow_drafts %>
+[receive]
+<% if @receive_max_object_size_limit != "" -%>
+	maxObjectSizeLimit = <%= @receive_max_object_size_limit %>
+<% end -%>
 <% @commentlinks.each do |commentlink| -%>
 [commentlink "<%= commentlink['name'] %>"]
 	match = "<%= commentlink['match'] %>"

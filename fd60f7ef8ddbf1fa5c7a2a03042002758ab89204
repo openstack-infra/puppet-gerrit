@@ -1,0 +1,9 @@
+Code-Review+2: yolanda.robla <info@ysoft.biz>
+Code-Review+2: James E. Blair <corvus@inaugust.com>
+Workflow+1: James E. Blair <corvus@inaugust.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 04 Jan 2016 23:07:09 +0000
+Reviewed-on: https://review.openstack.org/262603
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

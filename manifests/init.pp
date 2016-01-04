@@ -34,6 +34,10 @@
 #   database_poollimit:
 #   container_heaplimit:
 #   container_javaoptions:
+#   gc_start_time:
+#     Start time to define the first execution of the git garbage collection
+#   gc_interval:
+#     Interval for periodic repetition of triggering the git garbage collection
 #   core_loggingbuffersize:
 #   core_packedgitopenfiles:
 #   core_packedgitlimit:
@@ -150,6 +154,8 @@ class gerrit(
   $database_poollimit = '',
   $container_heaplimit = '',
   $container_javaoptions = '',
+  $gc_start_time = '',
+  $gc_interval = '',
   $core_loggingbuffersize = '',
   $core_packedgitlimit = '',
   $core_packedgitopenfiles = '',
@@ -334,6 +340,8 @@ class gerrit(
   # - $java_home
   # - $container_heaplimit
   # - $container_javaoptions
+  # - $gc_start_time
+  # - $gc_interval
   # - $core_packedgitopenfiles
   # - $core_packedgitlimit
   # - $core_packedgitwindowsize

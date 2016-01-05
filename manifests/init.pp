@@ -196,6 +196,8 @@ class gerrit(
   $new_groups_visible_to_all = true,
   $allow_drafts = true,
   $receive_max_object_size_limit = '',
+  $cache_diff_timeout = '',
+  $cache_diff_intraline_timeout = '',
 ) {
   include ::httpd
 
@@ -371,6 +373,9 @@ class gerrit(
   # - $new_groups_visible_to_all:
   # - $allow_drafts:
   # - $receive_max_object_size_limit
+  # - $cache_diff_timeout
+  # - $cache_diff_intraline_timeout
+
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,
     owner   => 'gerrit2',

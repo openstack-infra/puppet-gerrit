@@ -77,6 +77,12 @@
 <% if @sshd_threads != "" -%>
 	threads = <%= @sshd_threads %>
 <% end -%>
+<% if @sshd_idle_timeout != "" -%>
+	idleTimeout = <%= @sshd_idle_timeout %>
+<% end -%>
+<% if @sshd_max_connections_per_user != "" -%>
+	maxConnectionsPerUser = <%= @sshd_max_connections_per_user %>
+<% end -%>
 [httpd]
 	listenUrl = proxy-https://*:8081/
 <% if @httpd_maxwait != "" -%>

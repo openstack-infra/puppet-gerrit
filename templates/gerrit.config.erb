@@ -101,6 +101,14 @@
 	directory = cache
 [cache "web_sessions"]
 	maxAge = 1d
+<% if @cache_diff_timeout != "" -%>
+[cache "diff"]
+    timeout = <%= @cache_diff_timeout %>
+<% end -%>
+<% if @cache_diff_intraline_timeout != "" -%>
+[cache "diff_intraline"]
+    timeout = <%= @cache_diff_intraline_timeout %>
+<% end -%>
 [user]
 	email = <%= @email %>
 [change]

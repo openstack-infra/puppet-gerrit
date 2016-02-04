@@ -100,6 +100,9 @@
 <% if @httpd_maxthreads != "" -%>
 	maxThreads = <%= @httpd_maxthreads %>
 <% end -%>
+<% if @httpd_maxqueued != "" -%>
+	maxQueued = <%= @httpd_maxqueued %>
+<% end -%>
 [cache]
 	directory = cache
 [cache "web_sessions"]

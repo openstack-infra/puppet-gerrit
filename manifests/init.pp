@@ -53,6 +53,7 @@
 #   httpd_acceptorthreads:
 #   httpd_minthreads:
 #   httpd_maxthreads:
+#   httpd_maxQueued:
 #   httpd_maxwait:
 #     Gerrit configuration options; see Gerrit docs.
 #   commentlinks:
@@ -176,6 +177,7 @@ class gerrit(
   $httpd_acceptorthreads = '',
   $httpd_minthreads = '',
   $httpd_maxthreads = '',
+  $httpd_maxQueued = '',
   $httpd_maxwait = '',
   $commentlinks = [],
   $trackingids = [],
@@ -368,6 +370,7 @@ class gerrit(
   # - $httpd_acceptorthreads
   # - $httpd_minthreads
   # - $httpd_maxthreads
+  # - $httpd_maxQueued
   # - $commentlinks
   # - $trackingids
   # - $enable_melody

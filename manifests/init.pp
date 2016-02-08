@@ -450,8 +450,8 @@ class gerrit(
     ensure => present,
     before => Service['httpd'],
   }
-  if ! defined(Httpd::Mod['cgi']) {
-    httpd::mod { 'cgi':
+  if ! defined(Httpd::Mod['cgid']) {
+    httpd::mod { 'cgid':
       ensure => present,
       before => Service['httpd'],
     }

@@ -1,10 +1,10 @@
 # == Class: gerrit::cron
 #
 class gerrit::cron (
-  $replicate_local = true,
-  $replicate_path = '/opt/lib/git',
   # run `git repack` on gerrit repos by default, set true run `git gc` instead
-  $gitgc_repos = false,
+  $gitgc_repos     = false,
+  $replicate_local = true,
+  $replicate_path  = '/opt/lib/git',
 ) {
 
   if $gitgc_repos {

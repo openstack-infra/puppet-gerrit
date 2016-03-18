@@ -1,8 +1,8 @@
 # == Class: gerrit::welcome
 #
 class gerrit::welcome (
-    $ssh_welcome_rsa_key_contents,
-    $ssh_welcome_rsa_pubkey_contents,
+    $ssh_welcome_rsa_key_contents    = '',
+    $ssh_welcome_rsa_pubkey_contents = '',
 ) {
   file { '/home/gerrit2/review_site/etc/ssh_welcome_rsa_key':
     owner   => 'gerrit2',

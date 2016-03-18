@@ -1,10 +1,10 @@
 # == Class: gerrit::mysql
 #
 class gerrit::mysql(
+  $database_name       = '',
+  $database_password   = '',
+  $database_user       = '',
   $mysql_root_password = '',
-  $database_name = '',
-  $database_user = '',
-  $database_password = '',
 ) {
 
   class { '::mysql::server':

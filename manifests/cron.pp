@@ -2,7 +2,7 @@
 #
 class gerrit::cron (
   $replicate_local = true,
-  $replicate_path = '/opt/lib/git',
+  $replicate_path  = '/opt/lib/git',
 ) {
 
   cron { 'gerrit_repack':

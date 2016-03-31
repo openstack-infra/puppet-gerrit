@@ -12,6 +12,8 @@
 #   canonicalweburl:
 #     Used in the Gerrit config to generate links,
 #       eg., https://review.example.com/
+#   git_http_url:
+#     Optional base URL for repositories available over the HTTP protocol
 #   ssl_cert_file:
 #   ssl_key_file:
 #     Used in the Apache virtual host to specify the SSL cert and key files.
@@ -127,6 +129,7 @@ class gerrit(
   $vhost_name = $::fqdn,
   $redirect_to_canonicalweburl = true,
   $canonicalweburl = "https://${::fqdn}/",
+  $git_http_url = '',
   $robots_txt_source = '', # If left empty, the gerrit default will be used.
   $serveradmin = "webmaster@${::fqdn}",
   $ssl_cert_file = '/etc/ssl/certs/ssl-cert-snakeoil.pem',
@@ -338,6 +341,7 @@ class gerrit(
   # Template uses:
   # - $mysql_host
   # - $canonicalweburl
+  # - $git_http_url
   # - $smtpserver
   # - $sendemail_from
   # - $sendemail_include_diff

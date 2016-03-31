@@ -7,6 +7,9 @@
 	changeScreen = OLD_UI
 	reportBugText = <%= @report_bug_text %>
 	reportBugUrl = <%= @report_bug_url %>
+<% if @git_http_url != "" -%>
+	gitHttpUrl = <%= @git_http_url %>
+<% end -%>
 [database]
 	type = MYSQL
 	hostname = <%= @mysql_host %>

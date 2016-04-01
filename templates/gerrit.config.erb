@@ -9,6 +9,8 @@
 	reportBugUrl = <%= @report_bug_url %>
 <% if @git_http_url != "" -%>
 	gitHttpUrl = <%= @git_http_url %>
+<% if @canonical_git_url != "" -%>
+	canonicalGitUrl = <%= @canonical_git_url %>
 <% end -%>
 [database]
 	type = MYSQL

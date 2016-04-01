@@ -118,6 +118,8 @@
 #     Set this to false to disable drafts feature
 #   receive_max_object_size_limit
 #     Maximum allowed Git object size that 'receive-pack' will accept.
+#   download:
+#     The allowed download commands and schemes
 # TODO: make more gerrit options configurable here
 #
 class gerrit(
@@ -212,6 +214,7 @@ class gerrit(
   $receive_max_object_size_limit = '',
   $cache_diff_timeout = '',
   $cache_diff_intraline_timeout = '',
+  $download = {},
 ) {
   include ::httpd
 
@@ -394,6 +397,7 @@ class gerrit(
   # - $receive_max_object_size_limit
   # - $cache_diff_timeout
   # - $cache_diff_intraline_timeout
+  # - $download
 
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,

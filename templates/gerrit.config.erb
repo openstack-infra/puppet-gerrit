@@ -180,6 +180,14 @@
 	threads = <%= @index_threads %>
 <% end -%>
 <% end -%>
+<% unless @download.empty? -%>
+[download]
+  <% @download.each do |key, item| -%>
+    <% @item.each do |value| -%>
+      <%= key %>='<%= value %>'
+    <% end -%>
+  <% end -%>
+<% end -%>
 [groups]
         newGroupsVisibleToAll = <%= @new_groups_visible_to_all %>
 [mimetype "image/*"]

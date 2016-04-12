@@ -791,8 +791,15 @@ class gerrit(
     ],
   }
 
-  package { 'mysql-client':
-    ensure => present,
+  $mysql_data = load_module_metadata('mysql', true)
+  if $mysql_data == {} {
+    package { 'mysql-client':
+      ensure => present,
+      before => File['/etc/mysql/conf.d/client.conf'],
+    }
+  } else {
+    include ::mysql::client
+    Class['::mysql::client'] -> File['/etc/mysql/conf.d/client.conf']
   }
   # Add config to make clients assume UTF-8 encoding
   file { '/etc/mysql/conf.d/client.conf':
@@ -802,7 +809,6 @@ class gerrit(
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => Package['mysql-client'],
   }
 
   # Gerrit 2.10 requires libs not available in ubuntu repositories

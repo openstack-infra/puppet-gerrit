@@ -109,7 +109,7 @@
 [cache]
 	directory = cache
 [cache "web_sessions"]
-	maxAge = 1d
+	maxAge = 2m
 <% if @cache_diff_timeout != "" -%>
 [cache "diff"]
     timeout = <%= @cache_diff_timeout %>

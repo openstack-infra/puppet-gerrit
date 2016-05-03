@@ -23,7 +23,7 @@ class { '::gerrit::mysql':
 class { '::gerrit':
   mysql_host                          => 'localhost',
   mysql_password                      => '12345',
-  war                                 => 'http://tarballs.openstack.org/ci/gerrit/gerrit-v2.8.4.19.4548330.war',
+  war                                 => 'http://tarballs.openstack.org/ci/test/gerrit-v2.11.4.13.cb9800e.war',
   ssh_rsa_key_contents                => file('/tmp/gerrit-ssh-keys/ssh_rsa_key'),
   ssh_rsa_pubkey_contents             => file('/tmp/gerrit-ssh-keys/ssh_rsa_key.pub'),
   ssh_project_rsa_key_contents        => file('/tmp/gerrit-ssh-keys/ssh_project_rsa_key'),

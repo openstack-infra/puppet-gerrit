@@ -121,7 +121,7 @@ describe 'basic gerrit', :if => ['debian', 'ubuntu'].include?(os[:family]) do
 
     describe command("curl http://localhost --insecure --location") do
       its(:stdout) { should contain('Gerrit Code Review') }
-      its(:stdout) { should contain('version":"2.8.4-19-g4548330') }
+      its(:stdout) { should contain('"version":"2.11.4-13-g93a6f3b"') }
     end
 
     describe port(443) do
@@ -130,7 +130,7 @@ describe 'basic gerrit', :if => ['debian', 'ubuntu'].include?(os[:family]) do
 
     describe command("curl https://localhost --insecure --location") do
       its(:stdout) { should contain('Gerrit Code Review') }
-      its(:stdout) { should contain('version":"2.8.4-19-g4548330') }
+      its(:stdout) { should contain('"version":"2.11.4-13-g93a6f3b"') }
     end
 
     describe port(8081) do

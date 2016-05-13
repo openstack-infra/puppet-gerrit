@@ -33,6 +33,13 @@ class { '::gerrit':
   ssh_replication_rsa_pubkey_contents => file('/tmp/gerrit-ssh-keys/ssh_replication_rsa_key.pub'),
   secondary_index                     => true,
   secondary_index_type                => 'LUCENE',
+  commitmessage_params                =>
+    {
+      maxSubjectLength   => '60',
+      maxLineLength      => '72',
+      longLinesThreshold => '20',
+      rejectTooLong      => 'true',
+    },
 }
 
 class { '::gerrit::cron': }

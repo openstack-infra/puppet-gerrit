@@ -190,6 +190,14 @@
     <% end -%>
   <% end -%>
 <% end -%>
+<% unless @commitmessage_params.nil? or @commitmessage_params.empty? -%>
+[commitmessage]
+  <% @commitmessage_params.each do |key, value| -%>
+    <% if key == "maxLineLength" or key == "longLinesThreshold" or key == "rejectTooLong" or key == "maxSubjectLength" -%>
+      <%= key %> = <%= value %>
+    <% end -%>
+  <% end -%>
+<% end -%>
 [groups]
         newGroupsVisibleToAll = <%= @new_groups_visible_to_all %>
 [mimetype "image/*"]

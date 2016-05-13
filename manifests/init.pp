@@ -127,6 +127,14 @@
 #           'scheme'  => ['ssh', 'anon_http', 'anon_git'],
 #           'archive' => ['tar', 'tbz2', 'tgz', 'txz'],
 #       },
+#   commitmessage_params:
+#     A dict of commit message parameters, valid params are: maxLineLength,
+#       longLinesThreshold, rejectTooLong, and maxSubjectLength.
+#     Example:
+#       commitmessage_params   => {
+#           maxSubjectLength   => '60',
+#           maxLineLength      => '72',
+#         },
 #   java_home:
 #     The path to java home directory
 # TODO: make more gerrit options configurable here
@@ -224,6 +232,7 @@ class gerrit(
   $cache_diff_timeout = '',
   $cache_diff_intraline_timeout = '',
   $download = {},
+  $commitmessage_params = {},
   $java_home = '/usr/lib/jvm/java-7-openjdk-amd64/jre',
 ) {
   include ::httpd
@@ -403,6 +412,7 @@ class gerrit(
   # - $cache_diff_timeout
   # - $cache_diff_intraline_timeout
   # - $download
+  # - $commitmessage_params
 
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,

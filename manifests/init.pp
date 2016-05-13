@@ -127,6 +127,9 @@
 #           'scheme'  => ['ssh', 'anon_http', 'anon_git'],
 #           'archive' => ['tar', 'tbz2', 'tgz', 'txz'],
 #       },
+#   commitmessage_params:
+#     A dict of commit message parameters, valid params are: maxLineLength,
+#       longLinesThreshold, rejectTooLong, and maxSubjectLength.
 # TODO: make more gerrit options configurable here
 #
 class gerrit(
@@ -222,6 +225,7 @@ class gerrit(
   $cache_diff_timeout = '',
   $cache_diff_intraline_timeout = '',
   $download = {},
+  $commitmessage_params = {},
 ) {
   include ::httpd
 
@@ -405,6 +409,7 @@ class gerrit(
   # - $cache_diff_timeout
   # - $cache_diff_intraline_timeout
   # - $download
+  # - $commitmessage_params
 
   file { '/home/gerrit2/review_site/etc/gerrit.config':
     ensure  => present,

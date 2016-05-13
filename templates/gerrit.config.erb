@@ -188,6 +188,10 @@
     <% end -%>
   <% end -%>
 <% end -%>
+[commitmessage]
+<% if @commitmessage_maxlinelength != "" -%>
+	maxLineLength = <%= @commitmessage_maxlinelength %>
+<% end -%>
 [groups]
         newGroupsVisibleToAll = <%= @new_groups_visible_to_all %>
 [mimetype "image/*"]

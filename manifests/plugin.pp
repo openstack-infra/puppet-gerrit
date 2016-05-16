@@ -53,6 +53,7 @@ define gerrit::plugin(
       File[$plugin_cache_dir],
       Class['gerrit::user'],
     ],
+    unless  => "test -f ${plugin_cache_dir}/${plugin}",
   }
 
   if (!defined(File[$plugin_dir])) {
@@ -72,7 +73,6 @@ define gerrit::plugin(
     path    => ['/bin','/usr/bin', '/usr/sbin', '/usr/local/bin'],
     require => Exec["download-${plugin}"],
     user    => 'gerrit2',
-    unless  => "test -f ${plugin_dir}/${base_plugin}",
   }
 
 }

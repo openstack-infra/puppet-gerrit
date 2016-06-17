@@ -40,6 +40,26 @@ class { '::gerrit':
       longLinesThreshold => '20',
       rejectTooLong      => 'true',
     },
+  its_plugins                         => [
+    {
+      'name'          => 'its-storyboard',
+      'password'      => 'secret_token',
+      'url'           => 'https://storyboard.openstack.org',
+    },
+  ],
+  its_rules                           => [
+    {
+      'name'          => 'change_updates',
+      'event_type'    => 'patchset-created',
+      'action'        => 'add-standard-comment',
+      label           => [
+        {
+          'name'      => 'approval-Code-Review',
+          'approvals' => '-2, -1',
+        },
+      ]
+     },
+   ]
 }
 
 class { '::gerrit::cron': }

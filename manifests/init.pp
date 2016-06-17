@@ -62,6 +62,34 @@
 #     Gerrit configuration options; see Gerrit docs.
 #   commentlinks:
 #     A list of regexes Gerrit should hyperlink.
+#   its_plugins:
+#     A list of its (issue tracking system) plugins to configure.
+#     Example:
+#       its_plugins  => [
+#         {
+#           'name'     => 'its-storyboard',
+#           'password' => 'secret_token',
+#           'url'      => 'https://storyboard.openstack.org',
+#         },
+#       ],
+#
+#   its_rules:
+#     A list of actions to perform on the its.
+#     Example:
+#       its_rules        => [
+#         {
+#           'name'       => 'change_updates',
+#           'event_type' => 'patchset-created',
+#           'action'     => 'add-standard-comment',
+#           label        => [
+#             {
+#               'name'      => 'approval-Code-Review',
+#               'approvals' => '-2, -1',
+#             },
+#           ]
+#          },
+#        ]
+#
 #   trackingids:
 #     A list of regexes to reference external tracking systems.
 #   war:
@@ -205,6 +233,8 @@ class gerrit(
   $httpd_maxqueued = '',
   $httpd_maxwait = '',
   $commentlinks = [],
+  $its_plugins = [],
+  $its_rules = [],
   $trackingids = [],
   $contactstore = false,
   $contactstore_appsec = '',
@@ -397,6 +427,8 @@ class gerrit(
   # - $httpd_maxthreads
   # - $httpd_maxqueued
   # - $commentlinks
+  # - $its_plugins
+  # - $its_rules
   # - $trackingids
   # - $enable_melody
   # - $melody_session
@@ -442,6 +474,23 @@ class gerrit(
     content => template('gerrit/secure.config.erb'),
     replace => true,
     require => File['/home/gerrit2/review_site/etc'],
+  }
+
+  # setup rules for its (issue tracking system) plugins
+  file { '/home/gerrit2/review_site/etc/its':
+    ensure  => 'directory',
+    owner   => 'gerrit2',
+    group   => 'gerrit2',
+    mode    => '0644',
+    require => File['/home/gerrit2/review_site/etc'],
+  }
+  file { '/home/gerrit2/review_site/etc/its/actions.config':
+    ensure  => present,
+    owner   => 'gerrit2',
+    group   => 'gerrit2',
+    mode    => '0644',
+    content => template('gerrit/gerrit.its_rules.erb'),
+    replace => true,
   }
 
   # Set up apache.

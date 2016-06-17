@@ -136,6 +136,12 @@
 	html = "<%= commentlink['html'] %>"
 <% end -%>
 <% end -%>
+<% @its_plugins.each do |its_plugin| -%>
+[<%= its_plugin['name'] %>]
+	username = <%= its_plugin['username'] %>
+	password = <%= its_plugin['password'] %>
+	url = <%= its_plugin['url'] %>
+<% end -%>
 <% @trackingids.each do |trackingid| -%>
 [trackingid "<%= trackingid['name'] %>"]
 	match = "<%= trackingid['match'] %>"

@@ -32,6 +32,26 @@ class { '::gerrit':
   ssh_replication_rsa_pubkey_contents => file('/tmp/gerrit-ssh-keys/ssh_replication_rsa_key.pub'),
   secondary_index                     => true,
   secondary_index_type                => 'LUCENE',
+  its_plugins                         => [
+    {
+      'name'          => 'its-storyboard',
+      'password'      => 'secret_token',
+      'url'           => 'https://storyboard.openstack.org',
+    },
+  ],
+  its_rules                           => [
+    {
+      'name'          => 'change_updates',
+      'event_type'    => 'patchset-created',
+      'action'        => 'add-standard-comment',
+      label           => [
+        {
+          'name'      => 'approval-Code-Review',
+          'approvals' => '-2, -1',
+        },
+      ]
+     },
+   ]
 }
 
 class { '::gerrit::cron': }

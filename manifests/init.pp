@@ -60,6 +60,8 @@
 #     Gerrit configuration options; see Gerrit docs.
 #   commentlinks:
 #     A list of regexes Gerrit should hyperlink.
+#   its_plugins:
+#     A list of its (issue tracking system) plugins to configure.
 #   trackingids:
 #     A list of regexes to reference external tracking systems.
 #   war:
@@ -192,6 +194,7 @@ class gerrit(
   $httpd_maxqueued = '',
   $httpd_maxwait = '',
   $commentlinks = [],
+  $its_plugins = [],
   $trackingids = [],
   $contactstore = false,
   $contactstore_appsec = '',
@@ -386,6 +389,7 @@ class gerrit(
   # - $httpd_maxthreads
   # - $httpd_maxqueued
   # - $commentlinks
+  # - $its_plugins
   # - $trackingids
   # - $enable_melody
   # - $melody_session

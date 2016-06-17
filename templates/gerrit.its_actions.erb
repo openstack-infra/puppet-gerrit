@@ -1,0 +1,10 @@
+<% @its_rules.each do |its_rule| -%>
+[rule "<%= its_rule['name'] %>"]
+	action = "<%= its_rule['action'] %>"
+<% if its_rule['event-type'] != "" -%>
+	event-type = "<%= its_rule['event_type'] %>"
+<% end -%>
+<% if its_rule['label'] != "" -%>
+	"<%= its_rule['label'] %>" = "<%= its_rule['label']['approvals'] %>"
+<% end -%>
+<% end -%>

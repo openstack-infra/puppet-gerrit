@@ -48,7 +48,9 @@
 	includeDiff = <%= @sendemail_include_diff %>
 [container]
 	user = gerrit2
+<% if @java_home != "" -%>
 	javaHome = <%= @java_home %>
+<% end -%>
 <% if @container_javaoptions != "" -%>
         javaOptions = <%= @container_javaoptions %>
 <% end -%>

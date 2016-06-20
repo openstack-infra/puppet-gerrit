@@ -228,6 +228,7 @@ class gerrit(
   $cache_diff_timeout = '',
   $cache_diff_intraline_timeout = '',
   $download = {},
+  $java_home = '',
 ) {
   include ::httpd
 
@@ -235,11 +236,6 @@ class gerrit(
     include ::jeepyb
   }
   include ::pip
-
-  $java_home = $::lsbdistcodename ? {
-    'precise' => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
-    'trusty'  => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
-  }
 
   # get the war version from the passed in url, expecting something like
   # http://tarballs.openstack.org/ci/gerrit/gerrit-v2.10.2.22.acc615e.war
@@ -442,10 +438,10 @@ class gerrit(
 
   # setup rules for its (issue tracking system) plugins
   file { '/home/gerrit2/review_site/etc/its':
-    ensure => 'directory',
-    owner  => 'gerrit2',
-    group  => 'gerrit2',
-    mode   => '0644',
+    ensure  => 'directory',
+    owner   => 'gerrit2',
+    group   => 'gerrit2',
+    mode    => '0644',
     require => File['/home/gerrit2/review_site/etc'],
   }
   file { '/home/gerrit2/review_site/etc/its/actions.config':

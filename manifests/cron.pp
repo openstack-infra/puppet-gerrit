@@ -6,22 +6,28 @@ class gerrit::cron (
 ) {
 
   cron { 'gerrit_repack':
+    ensure      => absent,
+  }
+  cron { 'gerrit_gitgc':
     user        => 'gerrit2',
     weekday     => '0',
     hour        => '4',
     minute      => '7',
-    command     => 'find /home/gerrit2/review_site/git/ -type d -name "*.git" -print -exec git --git-dir="{}" repack -afd \;',
+    command     => 'find /home/gerrit2/review_site/git/ -type d -name "*.git" -print -exec git --git-dir="{}" gc \;',
     environment => 'PATH=/usr/bin:/bin:/usr/sbin:/sbin',
   }
 
-  # if local replication is enabled, repack this mirror as well
+  cron { 'mirror_repack_local':
+    ensure      => absent,
+  }
+  # if local replication is enabled, gc this mirror as well
   if $replicate_local {
-    cron { 'mirror_repack_local':
+    cron { 'mirror_gitgc_local':
       user        => 'gerrit2',
       weekday     => '0',
       hour        => '4',
       minute      => '17',
-      command     => "find ${replicate_path} -type d -name \"*.git\" -print -exec git --git-dir=\"{}\" repack -afd \\;",
+      command     => "find ${replicate_path} -type d -name \"*.git\" -print -exec git --git-dir=\"{}\" gc \\;",
       environment => 'PATH=/usr/bin:/bin:/usr/sbin:/sbin',
     }
   }

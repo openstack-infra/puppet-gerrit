@@ -68,11 +68,11 @@ define gerrit::plugin(
   }
 
   exec { "install-${base_plugin}":
-    command => "cp ${plugin_cache_dir}/${plugin} ${plugin_dir}/${base_plugin}",
-    path    => ['/bin','/usr/bin', '/usr/sbin', '/usr/local/bin'],
-    require => Exec["download-${plugin}"],
-    user    => 'gerrit2',
-    unless  => "test -f ${plugin_dir}/${base_plugin}",
+    command     => "cp ${plugin_cache_dir}/${plugin} ${plugin_dir}/${base_plugin}",
+    path        => ['/bin','/usr/bin', '/usr/sbin', '/usr/local/bin'],
+    subscribe   => Exec["download-${plugin}"],
+    user        => 'gerrit2',
+    refreshonly => true,
   }
 
 }

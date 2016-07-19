@@ -10,6 +10,9 @@
 <% if @git_http_url != "" -%>
 	gitHttpUrl = <%= @git_http_url %>
 <% end -%>
+<% if @canonical_git_url != "" -%>
+	canonicalGitUrl = <%= @canonical_git_url %>
+<% end -%>
 [database]
 	type = MYSQL
 	hostname = <%= @mysql_host %>

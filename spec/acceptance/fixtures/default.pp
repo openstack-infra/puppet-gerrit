@@ -57,9 +57,9 @@ class { '::gerrit':
           'name'      => 'approval-Code-Review',
           'approvals' => '-2, -1',
         },
-      ]
+      ],
      },
-   ]
+   ],
 }
 
 class { '::gerrit::cron': }

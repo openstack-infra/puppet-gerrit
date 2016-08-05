@@ -14,7 +14,8 @@ class gerrit::cron (
   }
 
   cron { 'gerrit_repack':
-    ensure      => absent,
+    ensure => absent,
+    user   => 'gerrit2',
   }
   cron { 'optimize_git_repo':
     user        => 'gerrit2',
@@ -28,7 +29,8 @@ class gerrit::cron (
   # if local replication is enabled, optimize this mirror as well
   if $replicate_local {
     cron { 'mirror_repack_local':
-      ensure      => absent,
+      ensure => absent,
+      user   => 'gerrit2',
     }
     cron { 'optimize_git_repo_local_replication':
       user        => 'gerrit2',

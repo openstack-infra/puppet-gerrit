@@ -86,9 +86,9 @@
 #               'name'      => 'approval-Code-Review',
 #               'approvals' => '-2, -1',
 #             },
-#           ]
+#           ],
 #          },
-#        ]
+#        ],
 #
 #   trackingids:
 #     A list of regexes to reference external tracking systems.

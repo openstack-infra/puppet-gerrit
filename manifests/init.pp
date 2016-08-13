@@ -140,6 +140,8 @@
 #     LUCENE (recommended), SOLR (experimental). Note: as of
 #     Gerrit 2.9 LUCENE is default secondary index and SQL is
 #     removed.
+#   offline_reindex:
+#     Set this to true to run an offline index on upgrade
 #   reindex_threads:
 #     The number of threads to use for full offline reindexing of Gerrit data
 #   index_threads:
@@ -253,6 +255,7 @@ class gerrit(
   $testmode = false,
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
+  $offline_reindex = false,
   $enable_javamelody_top_menu = false,
   $manage_jeepyb = true,
   $reindex_threads = $::processorcount/2,
@@ -440,6 +443,7 @@ class gerrit(
   # - $report_bug_text
   # - $report_bug_url
   # - $secondary_index_type:
+  # - $offline_reindex:
   # - $reindex_threads:
   # - $index_threads:
   # - $new_groups_visible_to_all:
@@ -717,7 +721,7 @@ class gerrit(
     logoutput   => true,
   }
 
-  if ($secondary_index) {
+  if ($offline_reindex) {
     exec { 'gerrit-reindex':
       user        => 'gerrit2',
       command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",

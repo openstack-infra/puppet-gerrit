@@ -721,7 +721,7 @@ class gerrit(
     logoutput   => true,
   }
 
-  if ($offline_reindex) {
+  if ($offline_reindex or $secondary_index) {
     exec { 'gerrit-reindex':
       user        => 'gerrit2',
       command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",

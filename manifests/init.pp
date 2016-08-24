@@ -720,13 +720,27 @@ class gerrit(
     unless      => '/usr/bin/test -f /etc/init.d/gerrit',
     logoutput   => true,
   }
+  # We need to make the initial index for a fresh install.  By default
+  # the gerrit init call will do that, but because we have
+  # pre-populated various directories above, even a fresh install
+  # looks like an upgrade and the init process leaves out the index.
+  # Unless we create it, gerrit refuses to start with errors like
+  #   1) No index versions ready; run Reindex
+  exec { 'gerrit-initial-index':
+    user        => 'gerrit2',
+    command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",
+    subscribe   => [Exec['gerrit-initial-init']],
+    refreshonly => true,
+    logoutput   => true,
+  }
 
+  # We can now online reindex, so no need to run this on upgrades by
+  # default.
   if ($offline_reindex) {
     exec { 'gerrit-reindex':
       user        => 'gerrit2',
       command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",
       subscribe   => [File['/home/gerrit2/review_site/bin/gerrit.war'],
-                      Exec['gerrit-initial-init'],
                       Exec['gerrit-init']],
       refreshonly => true,
       logoutput   => true,

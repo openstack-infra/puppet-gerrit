@@ -89,10 +89,17 @@
 <% end -%>
 
   <Directory /home/gerrit2/review_site/git/>
+    Require all granted
     Order allow,deny
     Allow from all
   </Directory>
   <Directory /usr/lib/git-core>
+    Require all granted
+    Allow from all
+    Satisfy Any
+  </Directory>
+  <Directory /home/gerrit2/review_site/static/>
+    Require all granted
     Allow from all
     Satisfy Any
   </Directory>

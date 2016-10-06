@@ -1,276 +1,104 @@
-# Install and maintain Gerrit Code Review.
-# params:
-#   mysql_host:
-#     The mysql host to which gerrit should connect.
-#   mysql_password:
-#     The password with which gerrit connects to mysql.
-#   vhost_name:
-#     used in the Apache virtual host, eg., review.example.com
-#   redirect_to_canonicalweburl:
-#     Boolean value to determine whether or not mod_rewrite should redirect
-#     requests to the canonicalweburl
-#   canonicalweburl:
-#     Used in the Gerrit config to generate links,
-#       eg., https://review.example.com/
-#   git_http_url:
-#     Optional base URL for repositories available over the HTTP protocol
-#   canonical_git_url:
-#     URL for repositories available over the anonymous git protocol
-#   ssl_cert_file:
-#   ssl_key_file:
-#     Used in the Apache virtual host to specify the SSL cert and key files.
-#   ssl_chain_file:
-#     Optional, if you have an intermediate cert Apache should serve.
-#   ssl_*_file_contents:
-#     Optional, the contents of the respective cert files as a string. Will be
-#     used to have Puppet ensure the contents of these files. Default value of
-#     '' means Puppet should not manage these files.
-#   openidssourl:
-#     The URL to use for OpenID in SSO mode.
-#   email:
-#     The email address Gerrit should use when sending mail.
-#   smtpserver:
-#     The smtp server that Gerrit should send mail through.
-#   sendemail_from:
-#     gerrit.conf value for sendemail.from.
-#   sendemail_indclude_diff:
-#     Config emails to includes the complete unified diff of the change
-#   database_poollimit:
-#   container_heaplimit:
-#   container_javaoptions:
-#   gc_start_time:
-#     Start time to define the first execution of the git garbage collection
-#   gc_interval:
-#     Interval for periodic repetition of triggering the git garbage collection
-#   core_loggingbuffersize:
-#   core_packedgitopenfiles:
-#   core_packedgitlimit:
-#   core_packedgitwindowsize:
-#   sshd_threads:
-#   sshd_batch_threads:
-#     Number of threads for SSH command requests from non-interactive users
-#   sshd_listen_address:
-#   sshd_idle_timeout:
-#       Server automatically terminates idle connections after this time
-#   sshd_max_connections_per_user:
-#       Maximum number of concurrent SSH sessions a user account may open
-#   httpd_acceptorthreads:
-#   httpd_minthreads:
-#   httpd_maxthreads:
-#   httpd_maxqueued:
-#   httpd_maxwait:
-#     Gerrit configuration options; see Gerrit docs.
-#   commentlinks:
-#     A list of regexes Gerrit should hyperlink.
-#   its_plugins:
-#     A list of its (issue tracking system) plugins to configure.
-#     Example:
-#       its_plugins  => [
-#         {
-#           'name'     => 'its-storyboard',
-#           'password' => 'secret_token',
-#           'url'      => 'https://storyboard.openstack.org',
-#         },
-#       ],
-#
-#   its_rules:
-#     A list of actions to perform on the its.
-#     Example:
-#       its_rules        => [
-#         {
-#           'name'       => 'change_updates',
-#           'event_type' => 'patchset-created',
-#           'action'     => 'add-standard-comment',
-#           label        => [
-#             {
-#               'name'      => 'approval-Code-Review',
-#               'approvals' => '-2, -1',
-#             },
-#           ],
-#          },
-#        ],
-#
-#   trackingids:
-#     A list of regexes to reference external tracking systems.
-#   war:
-#     The URL of the Gerrit WAR that should be downloaded and installed.
-#     Note that only the final component is used for comparing to the most
-#     recently installed WAR.  In other words, if you update the war from:
-#
-#       http://tarballs.openstack.org/ci/gerrit.war
-#     to:
-#       http://somewhereelse.example.com/gerrit.war
-#
-#     Gerrit won't be updated unless you delete gerrit.war from
-#     ~gerrit2/gerrit-wars.  But if you change the URL from:
-#
-#       http://tarballs.openstack.org/ci/gerrit-2.2.2.war
-#     to:
-#       http://tarballs.openstack.org/ci/gerrit-2.3.0.war
-#     Gerrit will be upgraded on the next puppet run.
-#   contactstore:
-#     A boolean enabling the contact store feature
-#   contactstore_appsec:
-#     An application shared secret for the contact store protocol
-#   contactstore_pubkey:
-#     A public key with which to encrypt contact information
-#   contactstore_url:
-#     A URL for the remote contact store application
-#   replicate_local:
-#     A boolean enabling local replication for apache acceleration
-#   replication_force_update:
-#     A boolean enabling replication to force updates to remote
-#   replicate_path:
-#     The path to the local git replica if replicate_local is enabled
-#   gitweb:
-#     A boolean enabling gitweb
-#   cgit:
-#     A boolean enabling cgit
-#   web_repo_url:
-#     Url for setting the location of an external git browser
-#   web_repo_url_encode:
-#     Whether or not Gerrit should encode the generated viewer URL.
-#   testmode:
-#     Set this to true to disable cron jobs and replication,
-#     which can interfere with testing.
-#   secondary_index:
-#     Set this to true to enable secondary index support
-#   secondary_index_type:
-#     which secondary index to use: SQL (no secondary index),
-#     LUCENE (recommended), SOLR (experimental). Note: as of
-#     Gerrit 2.9 LUCENE is default secondary index and SQL is
-#     removed.
-#   offline_reindex:
-#     Set this to true to run an offline index on upgrade
-#   reindex_threads:
-#     The number of threads to use for full offline reindexing of Gerrit data
-#   index_threads:
-#     Number of threads to use for indexing in normal interactive operations
-#   allow_drafts:
-#     Set this to false to disable drafts feature
-#   receive_max_object_size_limit
-#     Maximum allowed Git object size that 'receive-pack' will accept.
-#   download:
-#     The allowed download commands and schemes.  The data structor for this
-#     should be a hash with keys and array of values (i.e. {key => [values]})
-#     Example:
-#       download      => {
-#           'command' => ['checkout', 'cherry_pick', 'pull', 'format_patch'],
-#           'scheme'  => ['ssh', 'anon_http', 'anon_git'],
-#           'archive' => ['tar', 'tbz2', 'tgz', 'txz'],
-#       },
-#   commitmessage_params:
-#     A dict of commit message parameters, valid params are: maxLineLength,
-#       longLinesThreshold, rejectTooLong, and maxSubjectLength.
-#     Example:
-#       commitmessage_params   => {
-#           maxSubjectLength   => '60',
-#           maxLineLength      => '72',
-#         },
-#   java_home:
-#     The path to java home directory
-# TODO: make more gerrit options configurable here
-#
+# Class: gerrit
 class gerrit(
-  $mysql_host = 'localhost',
-  $mysql_password,
-  $war = '',
-  $email_private_key = '',
-  $token_private_key = '',
-  $vhost_name = $::fqdn,
-  $redirect_to_canonicalweburl = true,
-  $canonicalweburl = "https://${::fqdn}/",
-  $git_http_url = '',
-  $canonical_git_url = '',
-  $robots_txt_source = '', # If left empty, the gerrit default will be used.
-  $serveradmin = "webmaster@${::fqdn}",
-  $ssl_cert_file = '/etc/ssl/certs/ssl-cert-snakeoil.pem',
-  $ssl_key_file = '/etc/ssl/private/ssl-cert-snakeoil.key',
-  $ssl_chain_file = '',
-  $ssl_cert_file_contents = '', # If left empty puppet will not create file.
-  $ssl_key_file_contents = '', # If left empty puppet will not create file.
-  $ssl_chain_file_contents = '', # If left empty puppet will not create file.
-  $ssh_dsa_key_contents = '', # If left empty puppet will not create file.
-  $ssh_dsa_pubkey_contents = '', # If left empty puppet will not create file.
-  $ssh_rsa_key_contents = '', # If left empty puppet will not create file.
-  $ssh_rsa_pubkey_contents = '', # If left empty puppet will not create file.
-  $ssh_project_rsa_key_contents = '', # If left empty will not create file.
-  $ssh_project_rsa_pubkey_contents = '', # If left empty will not create file.
-  $ssh_replication_rsa_key_contents = '', # If left emptry will not create files.
-  $ssh_replication_rsa_pubkey_contents = '', # If left emptry will not create files.
-  $gerrit_auth_type = 'OPENID_SSO',
-  $gerrit_contributor_agreement = true,
-  $openidssourl = 'https://login.launchpad.net/+openid',
-  $ldap_server = '',
-  $ldap_account_base = '',
-  $ldap_group_base = '',
-  $ldap_username = '',
-  $ldap_password = '',
-  $ldap_account_pattern = '',
-  $ldap_account_email_address = '',
-  $ldap_sslverify = true,
-  $ldap_ssh_account_name = '',
-  $ldap_accountfullname = '',
-  $email = '',
-  $smtpserver = 'localhost',
-  $sendemail_from = 'MIXED',
-  $sendemail_include_diff = false,
-  $database_poollimit = '',
-  $container_heaplimit = '',
-  $container_javaoptions = '',
-  $gc_start_time = '',
-  $gc_interval = '',
-  $core_loggingbuffersize = '',
-  $core_packedgitlimit = '',
-  $core_packedgitopenfiles = '',
-  $core_packedgitwindowsize = '',
-  $sshd_threads = '',
-  $sshd_batch_threads = '',
-  $sshd_listen_address = '*:29418',
-  $sshd_idle_timeout = '',
-  $sshd_max_connections_per_user = '',
-  $httpd_acceptorthreads = '',
-  $httpd_minthreads = '',
-  $httpd_maxthreads = '',
-  $httpd_maxqueued = '',
-  $httpd_maxwait = '',
-  $commentlinks = [],
-  $its_plugins = [],
-  $its_rules = [],
-  $trackingids = [],
-  $contactstore = false,
-  $contactstore_appsec = '',
-  $contactstore_pubkey = '',
-  $contactstore_url = '',
-  $enable_melody = false,
-  $melody_session = false,
-  $replicate_local = false,
-  $replicate_path = '/opt/lib/git',
-  $replication_force_update = true,
-  $replication = [],
-  $gitweb = true,
-  $cgit = false,
-  $web_repo_url = '',
-  $web_repo_url_encode = true,
-  $testmode = false,
-  $secondary_index = false,
-  $secondary_index_type = 'LUCENE',
-  $offline_reindex = false,
-  $enable_javamelody_top_menu = false,
-  $manage_jeepyb = true,
-  $reindex_threads = $::processorcount/2,
-  $report_bug_text = 'Report Bug',
-  $report_bug_url = '',
-  $index_threads = 1,
-  $new_groups_visible_to_all = true,
-  $allow_drafts = true,
-  $receive_max_object_size_limit = '',
-  $cache_diff_timeout = '',
-  $cache_diff_intraline_timeout = '',
-  $download = {},
-  $commitmessage_params = {},
-  $java_home = '/usr/lib/jvm/java-7-openjdk-amd64/jre',
-) {
+  $mysql_host = $::gerrit::params::mysql_host,
+  $mysql_password = $::gerrit::params::mysql_password,
+  $war = $::gerrit::params::war,
+  $email_private_key = $::gerrit::params::email_private_key,
+  $token_private_key = $::gerrit::params::token_private_key,
+  $vhost_name = $::gerrit::params::vhost_name,
+  $redirect_to_canonicalweburl = $::gerrit::params::redirect_to_canonicalweburl,
+  $canonicalweburl = $::gerrit::params::canonicalweburl,
+  $git_http_url = $::gerrit::params::git_http_url,
+  $canonical_git_url = $::gerrit::params::canonical_git_url,
+  $robots_txt_source = $::gerrit::params::robots_txt_source,
+  $serveradmin = $::gerrit::params::serveradmin,
+  $ssl_cert_file = $::gerrit::params::ssl_cert_file,
+  $ssl_key_file = $::gerrit::params::ssl_key_file,
+  $ssl_chain_file = $::gerrit::params::ssl_chain_file,
+  $ssl_cert_file_contents = $::gerrit::params::ssl_cert_file_contents,
+  $ssl_key_file_contents = $::gerrit::params::ssl_key_file_contents,
+  $ssl_chain_file_contents = $::gerrit::params::ssl_chain_file_contents,
+  $ssh_dsa_key_contents = $::gerrit::params::ssh_dsa_key_contents,
+  $ssh_dsa_pubkey_contents = $::gerrit::params::ssh_dsa_pubkey_contents,
+  $ssh_rsa_key_contents = $::gerrit::params::ssh_rsa_key_contents,
+  $ssh_rsa_pubkey_contents = $::gerrit::params::ssh_rsa_pubkey_contents,
+  $ssh_project_rsa_key_contents = $::gerrit::params::ssh_project_rsa_key_contents,
+  $ssh_project_rsa_pubkey_contents = $::gerrit::params::ssh_project_rsa_pubkey_contents,
+  $ssh_replication_rsa_key_contents = $::gerrit::params::ssh_replication_rsa_key_contents,
+  $ssh_replication_rsa_pubkey_contents = $::gerrit::params::ssh_replication_rsa_pubkey_contents,
+  $gerrit_auth_type = $::gerrit::params::gerrit_auth_type,
+  $gerrit_contributor_agreement = $::gerrit::params::gerrit_contributor_agreement,
+  $openidssourl = $::gerrit::params::openidssourl,
+  $ldap_server = $::gerrit::params::ldap_server,
+  $ldap_account_base = $::gerrit::params::ldap_account_base,
+  $ldap_group_base = $::gerrit::params::ldap_group_base,
+  $ldap_username = $::gerrit::params::ldap_username,
+  $ldap_password = $::gerrit::params::ldap_password,
+  $ldap_account_pattern = $::gerrit::params::ldap_account_pattern,
+  $ldap_account_email_address = $::gerrit::params::ldap_account_email_address,
+  $ldap_sslverify = $::gerrit::params::ldap_sslverify,
+  $ldap_ssh_account_name = $::gerrit::params::ldap_ssh_account_name,
+  $ldap_accountfullname = $::gerrit::params::ldap_accountfullname,
+  $email = $::gerrit::params::email,
+  $smtpserver = $::gerrit::params::smtpserver,
+  $sendemail_from = $::gerrit::params::sendemail_from,
+  $sendemail_include_diff = $::gerrit::params::sendemail_include_diff,
+  $database_poollimit = $::gerrit::params::database_poollimit,
+  $container_heaplimit = $::gerrit::params::container_heaplimit,
+  $container_javaoptions = $::gerrit::params::container_javaoptions,
+  $gc_start_time = $::gerrit::params::gc_start_time,
+  $gc_interval = $::gerrit::params::gc_interval,
+  $core_loggingbuffersize = $::gerrit::params::core_loggingbuffersize,
+  $core_packedgitlimit = $::gerrit::params::core_packedgitlimit,
+  $core_packedgitopenfiles = $::gerrit::params::core_packedgitopenfiles,
+  $core_packedgitwindowsize = $::gerrit::params::core_packedgitwindowsize,
+  $sshd_threads = $::gerrit::params::sshd_threads,
+  $sshd_batch_threads = $::gerrit::params::sshd_batch_threads,
+  $sshd_listen_address = $::gerrit::params::sshd_listen_address,
+  $sshd_idle_timeout = $::gerrit::params::sshd_idle_timeout,
+  $sshd_max_connections_per_user = $::gerrit::params::sshd_max_connections_per_user,
+  $httpd_acceptorthreads = $::gerrit::params::httpd_acceptorthreads,
+  $httpd_minthreads = $::gerrit::params::httpd_minthreads,
+  $httpd_maxthreads = $::gerrit::params::httpd_maxthreads,
+  $httpd_maxqueued = $::gerrit::params::httpd_maxqueued,
+  $httpd_maxwait = $::gerrit::params::httpd_maxwait,
+  $commentlinks = $::gerrit::params::commentlinks,
+  $its_plugins = $::gerrit::params::its_plugins,
+  $its_rules = $::gerrit::params::its_rules,
+  $trackingids = $::gerrit::params::trackingids,
+  $contactstore = $::gerrit::params::contactstore,
+  $contactstore_appsec = $::gerrit::params::contactstore_appsec,
+  $contactstore_pubkey = $::gerrit::params::contactstore_pubkey,
+  $contactstore_url = $::gerrit::params::contactstore_url,
+  $enable_melody = $::gerrit::params::enable_melody,
+  $melody_session = $::gerrit::params::melody_session,
+  $replicate_local = $::gerrit::params::replicate_local,
+  $replicate_path = $::gerrit::params::replicate_path,
+  $replication_force_update = $::gerrit::params::replication_force_update,
+  $replication = $::gerrit::params::replication,
+  $gitweb = $::gerrit::params::gitweb,
+  $cgit = $::gerrit::params::cgit,
+  $web_repo_url = $::gerrit::params::web_repo_url,
+  $web_repo_url_encode = $::gerrit::params::web_repo_url_encode,
+  $testmode = $::gerrit::params::testmode,
+  $secondary_index = $::gerrit::params::secondary_index,
+  $secondary_index_type = $::gerrit::params::secondary_index_type,
+  $offline_reindex = $::gerrit::params::offline_reindex,
+  $enable_javamelody_top_menu = $::gerrit::params::enable_javamelody_top_menu,
+  $manage_jeepyb = $::gerrit::params::manage_jeepyb,
+  $reindex_threads = $::gerrit::params::reindex_threads,
+  $report_bug_text = $::gerrit::params::report_bug_text,
+  $report_bug_url = $::gerrit::params::report_bug_url,
+  $index_threads = $::gerrit::params::index_threads,
+  $new_groups_visible_to_all = $::gerrit::params::new_groups_visible_to_all,
+  $allow_drafts = $::gerrit::params::allow_drafts,
+  $receive_max_object_size_limit = $::gerrit::params::receive_max_object_size_limit,
+  $cache_diff_timeout = $::gerrit::params::cache_diff_timeout,
+  $cache_diff_intraline_timeout = $::gerrit::params::cache_diff_intraline_timeout,
+  $download = $::gerrit::params::download,
+  $commitmessage_params = $::gerrit::params::commitmessage_params,
+  $java_home = $::gerrit::params::java_home,
+) inherits ::gerrit::params {
   include ::httpd
 
   if $manage_jeepyb {

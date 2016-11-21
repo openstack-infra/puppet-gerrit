@@ -12,6 +12,8 @@
 #   canonicalweburl:
 #     Used in the Gerrit config to generate links,
 #       eg., https://review.example.com/
+#   known_hosts_content:
+#     Contents of the known_hosts file
 #   git_http_url:
 #     Optional base URL for repositories available over the HTTP protocol
 #   canonical_git_url:
@@ -180,6 +182,7 @@ class gerrit(
   $vhost_name = $::fqdn,
   $redirect_to_canonicalweburl = true,
   $canonicalweburl = "https://${::fqdn}/",
+  $known_hosts_content = '',
   $git_http_url = '',
   $canonical_git_url = '',
   $robots_txt_source = '', # If left empty, the gerrit default will be used.
@@ -662,6 +665,18 @@ class gerrit(
       content => $ssh_replication_rsa_pubkey_contents,
       replace => true,
       require => File['/home/gerrit2/.ssh']
+    }
+  }
+
+  if $known_hosts_content != '' {
+    file { '/home/gerrit2/.ssh/known_hosts':
+      ensure  => present,
+      owner   => 'gerrit2',
+      group   => 'gerrit2',
+      mode    => '0600',
+      content => $known_hosts_content,
+      replace => true,
+      require => File['/home/gerrit2/.ssh'],
     }
   }
 

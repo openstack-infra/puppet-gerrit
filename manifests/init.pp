@@ -432,6 +432,18 @@ class gerrit(
     require => File['/home/gerrit2/review_site/etc'],
   }
 
+  # File put in place in the gerrit2 user's home dir to make MySQL admin
+  # tasks more workable.
+  # Template uses $mysql_user, $email_host and $mysql_password
+  file { '/home/gerrit2/.my.cnf':
+    ensure  => present,
+    owner   => 'gerrit2',
+    group   => 'gerrit2',
+    mode    => '0600',
+    content => template('gerrit/my.cnf.erb'),
+    replace => true,
+  }
+
   # Set up apache.
 
   # Template uses:

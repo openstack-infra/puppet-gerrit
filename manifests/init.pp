@@ -123,13 +123,14 @@
 #   replicate_path:
 #     The path to the local git replica if replicate_local is enabled
 #   gitweb:
-#     A boolean enabling gitweb
-#   cgit:
-#     A boolean enabling cgit
-#   web_repo_url:
-#     Url for setting the location of an external git browser
-#   web_repo_url_encode:
-#     Whether or not Gerrit should encode the generated viewer URL.
+#     A dict of gitweb parameters
+#     Example:
+#       gitweb   => {
+#            type       => 'cgit',
+#            url        => 'https://git.openstack.org/cgit/',
+#            revision   => '${project}/commit/?id=${commit}',
+#            urlEncode  => 'false',
+#         },
 #   testmode:
 #     Set this to true to disable cron jobs and replication,
 #     which can interfere with testing.
@@ -248,10 +249,7 @@ class gerrit(
   $replicate_path = '/opt/lib/git',
   $replication_force_update = true,
   $replication = [],
-  $gitweb = true,
-  $cgit = false,
-  $web_repo_url = '',
-  $web_repo_url_encode = true,
+  $gitweb = {},
   $testmode = false,
   $secondary_index = false,
   $secondary_index_type = 'LUCENE',
@@ -436,8 +434,6 @@ class gerrit(
   # - $enable_melody
   # - $melody_session
   # - $gitweb
-  # - web_repo_url
-  # - web_repo_url_encode
   # - $contactstore_appsec
   # - $contactstore_url
   # - $report_bug_text

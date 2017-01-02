@@ -165,17 +165,11 @@
 	session = <%= @melody_session %>
 [plugin "javamelody"]
         allowTopMenu = <%= @enable_javamelody_top_menu %>
-<% if @gitweb or @cgit -%>
+<% unless @gitweb.nil? or @gitweb.empty? -%>
 [gitweb]
-<% if @gitweb -%>
-	revision = "?p=${project}.git;a=commitdiff;h=${commit}"
-<% else -%>
-	type = cgit
-<% end -%>
-<% if  scope.lookupvar("gerrit::web_repo_url") -%>
-	url = "<%= scope.lookupvar('gerrit::web_repo_url') %>"
-	urlEncode = <%= @web_repo_url_encode %>
-<% end -%>
+  <% @gitweb.each do |key, value| -%>
+     <%= key %> = <%= value %>
+  <% end -%>
 <% end -%>
 <% if @contactstore == true -%>
 [contactstore]

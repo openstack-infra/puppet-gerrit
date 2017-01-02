@@ -33,6 +33,13 @@ class { '::gerrit':
   ssh_replication_rsa_pubkey_contents => file('/tmp/gerrit-ssh-keys/ssh_replication_rsa_key.pub'),
   secondary_index                     => true,
   secondary_index_type                => 'LUCENE',
+  gitweb                              =>
+    {
+      type       => 'cgit',
+      url        => 'https://git.openstack.org/cgit/',
+      revision   => '${project}/commit/?id=${commit}',
+      urlEncode  => 'false',
+    },
   commitmessage_params                =>
     {
       maxSubjectLength   => '60',

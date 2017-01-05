@@ -165,16 +165,10 @@
 	session = <%= @melody_session %>
 [plugin "javamelody"]
         allowTopMenu = <%= @enable_javamelody_top_menu %>
-<% if @gitweb -%>
+<% unless @gitweb.nil? or @gitweb.empty? -%>
 [gitweb]
-  <% if [true, false].include? @gitweb -%>
-    revision = "?p=${project}.git;a=commitdiff;h=${commit}"
-  <% else %>
-    <% unless @gitweb.nil? or @gitweb.empty? -%>
-      <% @gitweb.each do |key, value| -%>
-         <%= key %> = <%= value %>
-      <% end -%>
-    <% end -%>
+  <% @gitweb.each do |key, value| -%>
+    <%= key %> = <%= value %>
   <% end -%>
 <% end -%>
 <% if @contactstore == true -%>

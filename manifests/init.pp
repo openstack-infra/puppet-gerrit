@@ -779,7 +779,7 @@ class gerrit(
 
   # Ensure only one set of bouncy castle libs are installed
   # and remove libs installed by Gerrit init.
-  if versioncmp($gerrit_war_version, '2.10') > 0 {
+  if versioncmp($gerrit_war_version, '2.10') < 0 {
     # Remove libs for Gerrit 2.9 and lower
     tidy { '/home/gerrit2/review_site/lib':
       recurse => true,

@@ -903,7 +903,7 @@ class gerrit(
 
   # Gerrit 2.10 requires libs not available in ubuntu repositories
   # need to download them directly from maven central.
-  if versioncmp($gerrit_war_version, '2.10') > 0 {
+  if (versioncmp($gerrit_war_version, '2.10') > 0) and (versioncmp($gerrit_war_version, '2.12') < 0) {
     exec { 'download bcprov-jdk15on-1.51.jar':
       command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.51/bcprov-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcprov-1.51.jar',
       creates => '/home/gerrit2/review_site/lib/bcprov-1.51.jar',
@@ -913,6 +913,19 @@ class gerrit(
     exec { 'download bcpkix-jdk15on-1.51.jar':
       command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpkix-jdk15on/1.51/bcpkix-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcpkix-1.51.jar',
       creates => '/home/gerrit2/review_site/lib/bcpkix-1.51.jar',
+      before  => Exec['gerrit-start'],
+      require => File['/home/gerrit2/review_site/lib'],
+    }
+  } elsif (versioncmp($gerrit_war_version, '2.12') > 0) {
+    exec { 'download bcprov-jdk15on-1.52.jar':
+      command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.52/bcprov-jdk15on-1.52.jar -O /home/gerrit2/review_site/lib/bcprov-1.52.jar',
+      creates => '/home/gerrit2/review_site/lib/bcprov-1.52.jar',
+      before  => Exec['gerrit-start'],
+      require => File['/home/gerrit2/review_site/lib'],
+    }
+    exec { 'download bcpkix-jdk15on-1.52.jar':
+      command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpkix-jdk15on/1.52/bcpkix-jdk15on-1.52.jar -O /home/gerrit2/review_site/lib/bcpkix-1.52.jar',
+      creates => '/home/gerrit2/review_site/lib/bcpkix-1.52.jar',
       before  => Exec['gerrit-start'],
       require => File['/home/gerrit2/review_site/lib'],
     }
@@ -950,10 +963,17 @@ class gerrit(
   # Install Bouncy Castle's OpenPGP plugin and populate the contact store
   # public key file if we're using that feature.
   if ($contactstore == true) {
-    if versioncmp($gerrit_war_version, '2.10') > 0 {
+    if (versioncmp($gerrit_war_version, '2.10') > 0) and (versioncmp($gerrit_war_version, '2.12') < 0) {
       exec { 'download bcpgjdk15on-1.51.jar':
         command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.51/bcpg-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcpg-1.51.jar',
         creates => '/home/gerrit2/review_site/lib/bcpg-1.51.jar',
+        before  => Exec['gerrit-start'],
+        require => File['/home/gerrit2/review_site/lib'],
+      }
+    } elsif (versioncmp($gerrit_war_version, '2.12') > 0) {
+      exec { 'download bcpgjdk15on-1.52.jar':
+        command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.52/bcpg-jdk15on-1.52.jar -O /home/gerrit2/review_site/lib/bcpg-1.52.jar',
+        creates => '/home/gerrit2/review_site/lib/bcpg-1.52.jar',
         before  => Exec['gerrit-start'],
         require => File['/home/gerrit2/review_site/lib'],
       }

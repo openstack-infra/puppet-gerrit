@@ -1,9 +1,9 @@
 # Install and maintain Gerrit Code Review.
 # params:
-#   mysql_host:
-#     The mysql host to which gerrit should connect.
 #   mysql_password:
 #     The password with which gerrit connects to mysql.
+#   mysql_host:
+#     The mysql host to which gerrit should connect.
 #   vhost_name:
 #     used in the Apache virtual host, eg., review.example.com
 #   redirect_to_canonicalweburl:
@@ -172,8 +172,8 @@
 # TODO: make more gerrit options configurable here
 #
 class gerrit(
-  $mysql_host = 'localhost',
   $mysql_password,
+  $mysql_host = 'localhost',
   $war = '',
   $email_private_key = '',
   $token_private_key = '',

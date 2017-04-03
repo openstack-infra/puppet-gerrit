@@ -658,7 +658,7 @@ class gerrit(
   }
 
   if $ssh_replication_rsa_pubkey_contents != '' {
-    file { '/home/gerrit2/id_rsa.pub':
+    file { '/home/gerrit2/.ssh/id_rsa.pub':
       owner   => 'gerrit2',
       group   => 'gerrit2',
       mode    => '0644',

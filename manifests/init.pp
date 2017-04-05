@@ -446,7 +446,6 @@ class gerrit(
   # - $report_bug_text
   # - $report_bug_url
   # - $secondary_index_type:
-  # - $offline_reindex:
   # - $reindex_threads:
   # - $index_threads:
   # - $new_groups_visible_to_all:

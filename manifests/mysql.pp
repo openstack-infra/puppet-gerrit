@@ -25,6 +25,8 @@ the mysql module.")
       override_options => {
         'mysqld' => {
           'default-storage-engine' => 'InnoDB',
+          # Remove NO_ZERO_DATE mode so gerrit can initialize
+          'sql-mode'               => 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION',
         }
       },
     }

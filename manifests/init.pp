@@ -274,6 +274,7 @@ class gerrit(
   $commitmessage_params = {},
   $java_home = '/usr/lib/jvm/java-7-openjdk-amd64/jre',
 ) {
+  include ::gerrit::params
   include ::httpd
 
   if $manage_jeepyb {
@@ -304,13 +305,13 @@ class gerrit(
     ensure => present,
   }
 
-  package { 'openjdk-7-jre-headless':
+  package { $::gerrit::params::jre_package:
     ensure => present,
   }
 
   package { 'openjdk-6-jre-headless':
     ensure  => purged,
-    require => Package['openjdk-7-jre-headless'],
+    require => Package[$::gerrit::params::jre_package],
   }
 
   file { '/var/log/gerrit':
@@ -726,7 +727,7 @@ class gerrit(
     command     => "/usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start",
     subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
     refreshonly => true,
-    require     => [Package['openjdk-7-jre-headless'],
+    require     => [Package[$::gerrit::params::jre_package],
                     User['gerrit2'],
                     File['/home/gerrit2/review_site/etc/gerrit.config'],
                     File['/home/gerrit2/review_site/etc/secure.config']],
@@ -770,7 +771,7 @@ class gerrit(
     command     => "/etc/init.d/gerrit stop; /usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start",
     subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
     refreshonly => true,
-    require     => [Package['openjdk-7-jre-headless'],
+    require     => [Package[$::gerrit::params::jre_package],
                     User['gerrit2'],
                     File['/home/gerrit2/review_site/etc/gerrit.config'],
                     File['/home/gerrit2/review_site/etc/secure.config']],

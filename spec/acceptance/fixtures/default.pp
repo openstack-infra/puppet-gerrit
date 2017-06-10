@@ -20,8 +20,9 @@ class { '::gerrit::mysql':
   database_password   => '12345',
 }
 
+Class['::mysql::server::config'] ~> Class['::mysql::server::service']
+
 class { '::gerrit':
-  java_home                           => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
   mysql_host                          => 'localhost',
   mysql_password                      => '12345',
   war                                 => 'http://tarballs.openstack.org/ci/test/gerrit-v2.11.4.13.cb9800e.war',

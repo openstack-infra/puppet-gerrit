@@ -20,8 +20,13 @@ class { '::gerrit::mysql':
   database_password   => '12345',
 }
 
+# The mysql module doesn't restart the mysql service by default,
+# and since mysql is preinstalled by bindep, the service is already
+# started when the config is applied. This triggers a restart so that the
+# sql-mode can be applied.
+Class['::mysql::server::config'] ~> Class['::mysql::server::service']
+
 class { '::gerrit':
-  java_home                           => '/usr/lib/jvm/java-7-openjdk-amd64/jre',
   mysql_host                          => 'localhost',
   mysql_password                      => '12345',
   war                                 => 'http://tarballs.openstack.org/ci/test/gerrit-v2.11.4.13.cb9800e.war',

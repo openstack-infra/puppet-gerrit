@@ -4,6 +4,12 @@
 #     The password with which gerrit connects to mysql.
 #   mysql_host:
 #     The mysql host to which gerrit should connect.
+#   accountpatchreviewdb_url:
+#     The url to the account patch review database. This database must be
+#     separate from your normal reviewdb as setting them to be the same
+#     will cause the reviewdb to be dropped. Note this puppet module uses
+#     'reviewdb' for the review database, therefore don't use this name here.
+#     If not set then gerrit will use a default H2 database in review_site/db.
 #   vhost_name:
 #     used in the Apache virtual host, eg., review.example.com
 #   redirect_to_canonicalweburl:
@@ -175,6 +181,7 @@
 #
 class gerrit(
   $mysql_password,
+  $accountpatchreviewdb_url = undef,
   $mysql_host = 'localhost',
   $war = '',
   $email_private_key = '',
@@ -471,7 +478,8 @@ class gerrit(
   # Gerrit sets these permissions in 'init'; don't fight them.  If
   # these permissions aren't set correctly, gerrit init will write a
   # new secure.config file and lose the mysql password.
-  # Template uses $mysql_password, $email_private_key and $token_private_key
+  # Template uses $mysql_password, $email_private_key, $token_private_key,
+  # and accountpatchreviewdb_url.
   file { '/home/gerrit2/review_site/etc/secure.config':
     ensure  => present,
     owner   => 'gerrit2',

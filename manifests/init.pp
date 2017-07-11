@@ -803,6 +803,8 @@ class gerrit(
   # and remove libs installed by Gerrit init.
   if versioncmp($gerrit_war_version, '2.10') > 0 {
     # Remove libs for Gerrit 2.9 and lower
+    # We also remove backed up libs from gerrit init because if you have
+    # backups present and need to backup a new set gerrit init fails.
     tidy { '/home/gerrit2/review_site/lib':
       recurse => true,
       matches => ['bcprov-jdk*.jar',
@@ -811,7 +813,8 @@ class gerrit(
                   'mysql-connector-java-*.jar',
                   'bcprov.jar',
                   'bcpg.jar',
-                  'bcpkix.jar'],
+                  'bcpkix.jar',
+                  '.bcp*.jar.backup'],
       before  => Exec['gerrit-start'],
     }
   } else {

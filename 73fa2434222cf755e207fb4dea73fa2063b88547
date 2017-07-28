@@ -1,0 +1,9 @@
+Code-Review+2: James E. Blair <corvus@inaugust.com>
+Code-Review+2: Ian Wienand <iwienand@redhat.com>
+Workflow+1: Clark Boylan <cboylan@sapwetik.org>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 28 Jul 2017 16:28:56 +0000
+Reviewed-on: https://review.openstack.org/487156
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

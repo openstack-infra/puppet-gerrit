@@ -61,9 +61,6 @@
 <% if scope.lookupvar("gerrit::replicate_local") -%>
   ProxyPassMatch ^/p/ !
 <% end -%>
-<% if scope.lookupvar("gerrit::contactstore") == true -%>
-  ProxyPassMatch ^/fakestore$ !
-<% end -%>
 <% if scope.lookupvar("gerrit::robots_txt_source") != "" -%>
   ProxyPassMatch ^/robots.txt$ !
 <% end -%>
@@ -82,10 +79,6 @@
   AliasMatch ^/p/(.*/objects/[0-9a-f]{2}/[0-9a-f]{38})$ <%= scope.lookupvar("gerrit::replicate_path") %>/$1
   AliasMatch ^/p/(.*/objects/pack/pack-[0-9a-f]{40}.(pack|idx))$ <%= scope.lookupvar("gerrit::replicate_path") %>/$1
   ScriptAlias /p/ /usr/lib/git-core/git-http-backend/
-<% end -%>
-
-<% if scope.lookupvar("gerrit::contactstore") == true -%>
-  ScriptAlias /fakestore /home/gerrit2/review_site/lib/fakestore.cgi
 <% end -%>
 
   <Directory /home/gerrit2/review_site/git/>

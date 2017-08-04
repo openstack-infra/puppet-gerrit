@@ -116,14 +116,6 @@
 #     to:
 #       http://tarballs.openstack.org/ci/gerrit-2.3.0.war
 #     Gerrit will be upgraded on the next puppet run.
-#   contactstore:
-#     A boolean enabling the contact store feature
-#   contactstore_appsec:
-#     An application shared secret for the contact store protocol
-#   contactstore_pubkey:
-#     A public key with which to encrypt contact information
-#   contactstore_url:
-#     A URL for the remote contact store application
 #   replicate_local:
 #     A boolean enabling local replication for apache acceleration
 #   replication_force_update:
@@ -248,10 +240,6 @@ class gerrit(
   $its_plugins = [],
   $its_rules = [],
   $trackingids = [],
-  $contactstore = false,
-  $contactstore_appsec = '',
-  $contactstore_pubkey = '',
-  $contactstore_url = '',
   $enable_melody = false,
   $melody_session = false,
   $replicate_local = false,
@@ -448,8 +436,6 @@ class gerrit(
   # - $gitweb
   # - web_repo_url
   # - web_repo_url_encode
-  # - $contactstore_appsec
-  # - $contactstore_url
   # - $report_bug_text
   # - $report_bug_url
   # - $secondary_index_type:
@@ -519,7 +505,6 @@ class gerrit(
   # - $redirect_to_canonicalweburl
   # - $replicate_local
   # - $replicate_path
-  # - $contactstore
   # - $robots_txt_source
   ::httpd::vhost { $vhost_name:
     port     => 443,
@@ -982,56 +967,11 @@ class gerrit(
     }
   }
 
-  # Install Bouncy Castle's OpenPGP plugin and populate the contact store
-  # public key file if we're using that feature.
-  if ($contactstore == true) {
-    if (versioncmp($gerrit_war_version, '2.10') > 0) and (versioncmp($gerrit_war_version, '2.12') < 0) {
-      exec { 'download bcpgjdk15on-1.51.jar':
-        command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.51/bcpg-jdk15on-1.51.jar -O /home/gerrit2/review_site/lib/bcpg-1.51.jar',
-        creates => '/home/gerrit2/review_site/lib/bcpg-1.51.jar',
-        before  => Exec['gerrit-start'],
-        require => File['/home/gerrit2/review_site/lib'],
-      }
-    } elsif (versioncmp($gerrit_war_version, '2.12') > 0) {
-      exec { 'download bcpgjdk15on-1.52.jar':
-        command => '/usr/bin/wget https://repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.52/bcpg-jdk15on-1.52.jar -O /home/gerrit2/review_site/lib/bcpg-1.52.jar',
-        creates => '/home/gerrit2/review_site/lib/bcpg-1.52.jar',
-        before  => Exec['gerrit-start'],
-        require => File['/home/gerrit2/review_site/lib'],
-      }
-    } else {
-      package { 'libbcpg-java':
-        ensure => present,
-      }
-      file { '/home/gerrit2/review_site/lib/bcpg.jar':
-        ensure  => link,
-        target  => '/usr/share/java/bcpg.jar',
-        before  => Exec['gerrit-start'],
-        require => [
-          Package['libbcpg-java'],
-          File['/home/gerrit2/review_site/lib'],
-        ],
-      }
-    }
-
-    # Template uses $contactstore_pubkey
-    file { '/home/gerrit2/review_site/etc/contact_information.pub':
-      ensure  => present,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0444',
-      content => template('gerrit/contact_information.pub.erb'),
-      replace => true,
-      require => File['/home/gerrit2/review_site/etc'],
-    }
-    file { '/home/gerrit2/review_site/lib/fakestore.cgi':
-      ensure  => present,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0555',
-      source  => 'puppet:///modules/gerrit/fakestore.cgi',
-      require => File['/home/gerrit2/review_site/lib'],
-    }
+  file { '/home/gerrit2/review_site/etc/contact_information.pub':
+    ensure  => absent,
+  }
+  file { '/home/gerrit2/review_site/lib/fakestore.cgi':
+    ensure  => absent,
   }
 
   # create local replication directory if needed

@@ -5,7 +5,7 @@
   "summary": "Puppet module for Gerrit",
   "license": "Apache 2.0",
   "source": "git://git.openstack.org/openstack-infra/puppet-gerrit.git",
-  "project_page": "http://docs.openstack.org/infra/system-config/",
+  "project_page": "https://docs.openstack.org/infra/system-config/",
   "issues_url": "https://storyboard.openstack.org/#!/project/768",
   "dependencies": [
   ]

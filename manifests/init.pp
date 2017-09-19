@@ -265,6 +265,10 @@ class gerrit(
   $receive_max_object_size_limit = '',
   $cache_diff_timeout = '',
   $cache_diff_intraline_timeout = '',
+  $cache_accounts = '',
+  $cache_accounts_byemail = '',
+  $cache_accounts_byname = '',
+  $cache_groups_byuuid = '',
   $download = {},
   $commitmessage_params = {},
   $java_home = $::gerrit::params::java_home,
@@ -446,6 +450,10 @@ class gerrit(
   # - $receive_max_object_size_limit
   # - $cache_diff_timeout
   # - $cache_diff_intraline_timeout
+  # - $cache_accounts
+  # - $cache_accounts_byemail
+  # - $cache_accounts_byname
+  # - $cache_groups_byuuid
   # - $download
   # - $commitmessage_params
 

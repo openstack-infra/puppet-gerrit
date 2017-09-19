@@ -124,6 +124,22 @@
 [cache "diff_intraline"]
     timeout = <%= @cache_diff_intraline_timeout %>
 <% end -%>
+<% if @cache_accounts != "" -%>
+[cache "accounts"]
+    memoryLimit = <%= @cache_accounts %>
+<% end -%>
+<% if @cache_accounts_byemail != "" -%>
+[cache "accounts_byemail"]
+    memoryLimit = <%= @cache_accounts_byemail %>
+<% end -%>
+<% if @cache_accounts_byname != "" -%>
+[cache "accounts_byname"]
+    memoryLimit = <%= @cache_accounts_byname %>
+<% end -%>
+<% if @cache_groups_byuuid != "" -%>
+[cache "groups_byuuid"]
+    memoryLimit = <%= @cache_groups_byuuid %>
+<% end -%>
 [user]
 	email = <%= @email %>
 [change]

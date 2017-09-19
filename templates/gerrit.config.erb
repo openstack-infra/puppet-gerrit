@@ -182,12 +182,21 @@
 	session = <%= @melody_session %>
 [plugin "javamelody"]
         allowTopMenu = <%= @enable_javamelody_top_menu %>
+# Gerrit upstream hardcodes a .git extension for cgit.
+# The cgit settings below are the same just without the
+# .git extension.
 <% if @gitweb or @cgit -%>
 [gitweb]
 <% if @gitweb -%>
 	revision = "?p=${project}.git;a=commitdiff;h=${commit}"
 <% else -%>
-	type = cgit
+	type = custom
+    project = "${project}/summary"
+    revision = "${project}/commit/?id=${commit}"
+    branch = "${project}/log/?h=${branch}"
+    roottree = "${project}/tree/?h=${commit}"
+    file = "${project}/tree/${file}?h=${commit}"
+    filehistory = "${project}/log/${file}?h=${branch}"
 <% end -%>
 <% if  scope.lookupvar("gerrit::web_repo_url") -%>
 	url = "<%= scope.lookupvar('gerrit::web_repo_url') %>"

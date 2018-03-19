@@ -44,7 +44,9 @@ RSpec.configure do |c|
       if r.exit_code == 0
         zuul_clone_cmd = '/usr/zuul-env/bin/zuul-cloner '
         zuul_clone_cmd += '--cache-dir /opt/git '
-        zuul_clone_cmd += "--zuul-ref #{zuul_ref} "
+        # It is possible for zuul_ref to be empty, don't use it if so.
+        if zuul_ref
+            zuul_clone_cmd += "--zuul-ref #{zuul_ref} "
         zuul_clone_cmd += "--zuul-branch #{zuul_branch} "
         zuul_clone_cmd += "--zuul-url #{zuul_url} "
         zuul_clone_cmd += "git://git.openstack.org #{repo}"

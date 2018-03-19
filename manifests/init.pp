@@ -272,6 +272,7 @@ class gerrit(
   $download = {},
   $commitmessage_params = {},
   $java_home = $::gerrit::params::java_home,
+  $gerrit_initial_init = true,
 ) inherits ::gerrit::params {
   include ::httpd
 
@@ -720,33 +721,69 @@ class gerrit(
     mode    => '0644',
   }
 
+  if ($gerrit_initial_init) {
+    # If gerrit.war was just installed, run the Gerrit "init" command.
+    exec { 'gerrit-initial-init':
+      user        => 'gerrit2',
+      command     => "/usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start",
+      subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
+      refreshonly => true,
+      require     => [Package[$::gerrit::params::jre_package],
+                      User['gerrit2'],
+                      File['/home/gerrit2/review_site/etc/gerrit.config'],
+                      File['/home/gerrit2/review_site/etc/secure.config']],
+      notify      => Exec['install-core-plugins'],
+      unless      => '/usr/bin/test -f /etc/init.d/gerrit',
+      logoutput   => true,
+    }
+    # We need to make the initial index for a fresh install.  By default
+    # the gerrit init call will do that, but because we have
+    # pre-populated various directories above, even a fresh install
+    # looks like an upgrade and the init process leaves out the index.
+    # Unless we create it, gerrit refuses to start with errors like
+    #   1) No index versions ready; run Reindex
+    exec { 'gerrit-initial-index':
+      user        => 'gerrit2',
+      command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",
+      subscribe   => [Exec['gerrit-initial-init']],
+      refreshonly => true,
+      logoutput   => true,
+    }
 
-  # If gerrit.war was just installed, run the Gerrit "init" command.
-  exec { 'gerrit-initial-init':
-    user        => 'gerrit2',
-    command     => "/usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start",
-    subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
-    refreshonly => true,
-    require     => [Package[$::gerrit::params::jre_package],
-                    User['gerrit2'],
-                    File['/home/gerrit2/review_site/etc/gerrit.config'],
-                    File['/home/gerrit2/review_site/etc/secure.config']],
-    notify      => Exec['install-core-plugins'],
-    unless      => '/usr/bin/test -f /etc/init.d/gerrit',
-    logoutput   => true,
-  }
-  # We need to make the initial index for a fresh install.  By default
-  # the gerrit init call will do that, but because we have
-  # pre-populated various directories above, even a fresh install
-  # looks like an upgrade and the init process leaves out the index.
-  # Unless we create it, gerrit refuses to start with errors like
-  #   1) No index versions ready; run Reindex
-  exec { 'gerrit-initial-index':
-    user        => 'gerrit2',
-    command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",
-    subscribe   => [Exec['gerrit-initial-init']],
-    refreshonly => true,
-    logoutput   => true,
+    # If a new gerrit.war was just installed, run the Gerrit "init" command.
+    # Stop is included here because it may not be running or the init
+    # script may not exist, and in those cases, we don't care if it fails.
+    # Running the init script as the gerrit2 user _does_ work.
+    exec { 'gerrit-init':
+      user        => 'gerrit2',
+      command     => "/etc/init.d/gerrit stop; /usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start",
+      subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
+      refreshonly => true,
+      require     => [Package[$::gerrit::params::jre_package],
+                      User['gerrit2'],
+                      File['/home/gerrit2/review_site/etc/gerrit.config'],
+                      File['/home/gerrit2/review_site/etc/secure.config']],
+      onlyif      => '/usr/bin/test -f /etc/init.d/gerrit',
+      notify      => Exec['install-core-plugins'],
+      logoutput   => true,
+    }
+
+    # Install Core Plugins
+    exec { 'install-core-plugins':
+      user        => 'gerrit2',
+      command     => '/usr/bin/unzip -jo /home/gerrit2/review_site/bin/gerrit.war WEB-INF/plugins/* -d /home/gerrit2/review_site/plugins || true',
+      subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
+      require     => [Package['unzip'],
+                      File['/home/gerrit2/review_site/plugins']],
+      notify      => Exec['gerrit-start'],
+      refreshonly => true,
+      logoutput   => true,
+    }
+  } else {
+    # Create noop to keep puppet happy.
+    exec { 'gerrit-initial-init':
+      command => '/usr/bin/true'
+    }
   }
 
   # We can now online reindex, so no need to run this on upgrades by
@@ -760,36 +797,6 @@ class gerrit(
       refreshonly => true,
       logoutput   => true,
     }
-  }
-
-  # If a new gerrit.war was just installed, run the Gerrit "init" command.
-  # Stop is included here because it may not be running or the init
-  # script may not exist, and in those cases, we don't care if it fails.
-  # Running the init script as the gerrit2 user _does_ work.
-  exec { 'gerrit-init':
-    user        => 'gerrit2',
-    command     => "/etc/init.d/gerrit stop; /usr/bin/java -jar ${gerrit_war} init -d ${gerrit_site} --batch --no-auto-start",
-    subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
-    refreshonly => true,
-    require     => [Package[$::gerrit::params::jre_package],
-                    User['gerrit2'],
-                    File['/home/gerrit2/review_site/etc/gerrit.config'],
-                    File['/home/gerrit2/review_site/etc/secure.config']],
-    onlyif      => '/usr/bin/test -f /etc/init.d/gerrit',
-    notify      => Exec['install-core-plugins'],
-    logoutput   => true,
-  }
-
-  # Install Core Plugins
-  exec { 'install-core-plugins':
-    user        => 'gerrit2',
-    command     => '/usr/bin/unzip -jo /home/gerrit2/review_site/bin/gerrit.war WEB-INF/plugins/* -d /home/gerrit2/review_site/plugins || true',
-    subscribe   => File['/home/gerrit2/review_site/bin/gerrit.war'],
-    require     => [Package['unzip'],
-                    File['/home/gerrit2/review_site/plugins']],
-    notify      => Exec['gerrit-start'],
-    refreshonly => true,
-    logoutput   => true,
   }
 
   # Ensure only one set of bouncy castle libs are installed
@@ -842,16 +849,6 @@ class gerrit(
     require => Exec['gerrit-initial-init'],
   }
 
-  # The init script requires the path to gerrit to be set.
-  file { '/etc/default/gerritcodereview':
-    ensure  => present,
-    source  => 'puppet:///modules/gerrit/gerritcodereview.default',
-    replace => true,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0444',
-  }
-
   # Make sure the init script starts on boot.
   file { ['/etc/rc0.d/K10gerrit',
           '/etc/rc1.d/K10gerrit',
@@ -863,6 +860,16 @@ class gerrit(
     ensure  => link,
     target  => '/etc/init.d/gerrit',
     require => File['/etc/init.d/gerrit'],
+  }
+
+  # The init script requires the path to gerrit to be set.
+  file { '/etc/default/gerritcodereview':
+    ensure  => present,
+    source  => 'puppet:///modules/gerrit/gerritcodereview.default',
+    replace => true,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0444',
   }
 
   exec { 'gerrit-start':

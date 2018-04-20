@@ -1,0 +1,9 @@
+Code-Review+2: yolanda.robla <yroblamo@redhat.com>
+Code-Review+2: Clark Boylan <cboylan@sapwetik.org>
+Workflow+1: Clark Boylan <cboylan@sapwetik.org>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 20 Apr 2018 18:53:26 +0000
+Reviewed-on: https://review.openstack.org/461562
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

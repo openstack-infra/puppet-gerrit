@@ -169,6 +169,8 @@
 #         },
 #   java_home:
 #     The path to java home directory
+#   replicate_on_startup:
+#     A boolean enabling replication to all remotes on gerrit startup
 # TODO: make more gerrit options configurable here
 #
 class gerrit(
@@ -272,6 +274,7 @@ class gerrit(
   $download = {},
   $commitmessage_params = {},
   $java_home = $::gerrit::params::java_home,
+  $replicate_on_startup = false,
 ) inherits ::gerrit::params {
   include ::httpd
 

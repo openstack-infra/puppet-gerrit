@@ -3,6 +3,7 @@
 
 [gerrit]
 defaultForceUpdate = <%= @replication_force_update %>
+replicateOnStartup = <%= @replicate_on_startup %>
 
 <% @replication.each do |replication| -%>
 [remote "<%= replication['name'] %>"]

@@ -5,7 +5,8 @@ package { 'ssl-cert':
 }
 
 exec { 'ensure ssl-cert exists':
-  command => '/usr/sbin/groupadd -f ssl-cert'
+  command => '/usr/sbin/groupadd -f ssl-cert',
+  unless  => '/bin/grep ssl-cert /etc/group',
 }
 
 # workaround since pip is not being installed as part of this module
@@ -18,6 +19,7 @@ class { '::gerrit::mysql':
   database_name       => 'reviewdb',
   database_user       => 'gerrit2',
   database_password   => '12345',
+  before              => Class['::gerrit'],
 }
 
 # The mysql module doesn't restart the mysql service by default,
@@ -30,6 +32,8 @@ class { '::gerrit':
   mysql_host                          => 'localhost',
   mysql_password                      => '12345',
   war                                 => 'http://tarballs.openstack.org/ci/test/gerrit-v2.11.4.13.cb9800e.war',
+  vhost_name                          => 'localhost',
+  canonical_git_url                   => 'localhost',
   ssh_rsa_key_contents                => file('/tmp/gerrit-ssh-keys/ssh_rsa_key'),
   ssh_rsa_pubkey_contents             => file('/tmp/gerrit-ssh-keys/ssh_rsa_key.pub'),
   ssh_project_rsa_key_contents        => file('/tmp/gerrit-ssh-keys/ssh_project_rsa_key'),

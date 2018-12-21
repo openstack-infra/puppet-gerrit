@@ -165,7 +165,13 @@
 <% @trackingids.each do |trackingid| -%>
 [trackingid "<%= trackingid['name'] %>"]
 	match = "<%= trackingid['match'] %>"
+<% if trackingid['footers'] -%>
+<% trackingid['footers'].each do |footer_value| -%>
+	footer = "<%= footer_value %>"
+<% end -%>
+<% else -%>
 	footer = "<%= trackingid['footer'] %>"
+<% end -%>
 	system = "<%= trackingid['system'] %>"
 <% end -%>
 [theme]

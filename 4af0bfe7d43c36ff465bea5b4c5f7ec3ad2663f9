@@ -1,0 +1,10 @@
+Code-Review+2: Joshua Hesketh <josh@nitrotech.org>
+Code-Review+2: James E. Blair <corvus@inaugust.com>
+Code-Review+2: Monty Taylor <mordred@inaugust.com>
+Workflow+1: Jeremy Stanley <fungi@yuggoth.org>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 21 Dec 2018 21:33:59 +0000
+Reviewed-on: https://review.openstack.org/471077
+Project: openstack-infra/puppet-gerrit
+Branch: refs/heads/master

@@ -27,4 +27,9 @@ defaultForceUpdate = <%= @replication_force_update %>
 	projects = <%= project %>
 <% end -%>
 <% end -%>
+<% if replication['push'] != nil -%>
+<% replication['push'].each do |pushref| -%>
+	push = <%= pushref %>
+<% end -%>
+<% end -%>
 <% end -%>

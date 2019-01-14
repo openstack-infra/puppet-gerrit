@@ -142,6 +142,10 @@
 #     removed.
 #   offline_reindex:
 #     Set this to true to run an offline index on upgrade
+#     Note the default is false, but you need to set this to true if
+#     bootstrapping a new install of gerrit. On a new install of Gerrit we
+#     need to init the indexes. When doing upgrades these should be able
+#     to run offline instead.
 #   reindex_threads:
 #     The number of threads to use for full offline reindexing of Gerrit data
 #   index_threads:
@@ -735,27 +739,13 @@ class gerrit(
     unless      => '/usr/bin/test -f /etc/init.d/gerrit',
     logoutput   => true,
   }
-  # We need to make the initial index for a fresh install.  By default
-  # the gerrit init call will do that, but because we have
-  # pre-populated various directories above, even a fresh install
-  # looks like an upgrade and the init process leaves out the index.
-  # Unless we create it, gerrit refuses to start with errors like
-  #   1) No index versions ready; run Reindex
-  exec { 'gerrit-initial-index':
-    user        => 'gerrit2',
-    command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",
-    subscribe   => [Exec['gerrit-initial-init']],
-    refreshonly => true,
-    logoutput   => true,
-  }
 
-  # We can now online reindex, so no need to run this on upgrades by
-  # default.
   if ($offline_reindex) {
     exec { 'gerrit-reindex':
       user        => 'gerrit2',
       command     => "/usr/bin/java -jar ${gerrit_war} reindex -d ${gerrit_site} --threads ${reindex_threads}",
       subscribe   => [File['/home/gerrit2/review_site/bin/gerrit.war'],
+                      Exec['gerrit-initial-init'],
                       Exec['gerrit-init']],
       refreshonly => true,
       logoutput   => true,

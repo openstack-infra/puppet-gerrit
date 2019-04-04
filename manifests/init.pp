@@ -120,6 +120,8 @@
 #     A boolean enabling local replication for apache acceleration
 #   replication_force_update:
 #     A boolean enabling replication to force updates to remote
+#   replication_auto_reload:
+#     A boolean enabling automatic reload of the replication configuration
 #   replicate_path:
 #     The path to the local git replica if replicate_local is enabled
 #   gitweb:
@@ -249,6 +251,7 @@ class gerrit(
   $replicate_local = false,
   $replicate_path = '/opt/lib/git',
   $replication_force_update = true,
+  $replication_auto_reload = false,
   $replication = [],
   $gitweb = true,
   $cgit = false,

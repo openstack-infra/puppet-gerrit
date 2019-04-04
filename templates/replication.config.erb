@@ -3,6 +3,7 @@
 
 [gerrit]
 defaultForceUpdate = <%= @replication_force_update %>
+autoReload = <%= @replication_auto_reload %>
 
 <% @replication.each do |replication| -%>
 [remote "<%= replication['name'] %>"]

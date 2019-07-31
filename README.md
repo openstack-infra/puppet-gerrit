@@ -1,5 +1,3 @@
-# OpenStack Gerrit Module
+# This repo has moved to OpenDev
 
-## Overview
-
-Install and configure Gerrit.
+It can now be found at [https://opendev.org/opendev/puppet-gerrit](https://opendev.org/opendev/puppet-gerrit)
